@@ -2,22 +2,14 @@
 !!!
 %html
   %head
-    %meta{
-      'http-equiv' => 'content',
-      :content     => 'text/html; charset=utf-8'
-    }
-    %script{
-      :type     => 'text/javascript',
-      :language => 'JavaScript',
-      :src      => '/js/prototype.js'
-    }
-    %link{
-      :type => 'text/css',
-      :rel  => 'stylesheet',
-      :href => '/css/common.css'
-    }
+    %meta{'http-equiv' => 'content',:content => 'text/html; charset=utf-8'}
+    %script{:type => 'text/javascript',:language => 'JavaScript',:src => '/js/prototype.js'}
+    %link{:type => 'text/css',:rel => 'stylesheet',:href => '/css/common.css'}
   %body
     #header.navi
-      %h1= 'Something fun @cowplace'
+      %h1 Something fun @cowplace
+    #leftbar.navi
+    #wrapper
+      != yield
     #footer.navi
-      %p= 'copyleft (c) 2010 cowplace all rights reversed.'
+      %p copyleft (c) 2010 cowplace all rights reversed.
