@@ -1,0 +1,2 @@
+sinatra --version 1.0
+sinatra_more --version 0.3.40
