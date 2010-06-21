@@ -1,0 +1,10 @@
+- content_for :title do
+  %title= title_with_name
+- content_for :navigation do
+  = breadcrumb_list([:top])
+- content_for :leftbar do
+  %ul
+    %li
+      %a{:href => :profile} profile
+    %li
+      %a{:href => :visualized_sorting_algorithm} sorting

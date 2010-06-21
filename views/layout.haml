@@ -5,12 +5,19 @@
     %meta{'http-equiv' => 'content',:content => 'text/html; charset=utf-8'}
     = javascript_include_tag 'prototype'
     = stylesheet_link_tag 'common'
-    %title= write_title
+    != yield_content :header
+    != yield_content :title
   %body
     #header.navi
-      %h1 Something fun @cowplace
+      %h1 something fun @cowplace
+    #navigation.navi
+      != yield_content :navigation
     #leftbar.navi
+      != yield_content :leftbar
     #wrapper
-      != yield
+      #status
+        != yield_content :status
+      #main
+        != yield
     #footer.navi
       %p copyleft (c) 2010 cowplace all rights reversed.
