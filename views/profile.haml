@@ -1,0 +1,9 @@
+- content_for :title do
+  %title= title_with_name('who is') + '?'
+- content_for :navigation do
+  = breadcrumb_list([:top, :profile])
+- content_for :leftbar do
+  %p please check my attributes
+  - @kinds.each do |pair|
+    %dt= pair.first
+    %dd= pair.last

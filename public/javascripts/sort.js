@@ -7,9 +7,9 @@ var steps = $A([]);
 function init(){
   steps.clear();
   maxrid=0;
-  var num = $A($R(1,120));
+  var num = $A($R(1,70));
   shuffle(num);
-  reserved(num);
+  reserved(num, 0, 0);
   return num;
 }
 
@@ -30,13 +30,13 @@ function swap_without_record(num,i,j){
 //交換し途中経過を記録
 function swap(num,i,j){
   swap_without_record(num,i,j);
-  reserved(num);
+  reserved(num, i, j);
 }
 
 //途中経過を一度に記録して後に表示するための記憶
-function reserved(num){
+function reserved(num, base, comp){
   maxrid++;
-  steps.push([].concat(num));
+  steps.push([[].concat(num), base, comp]);
 }
 
 //表示(外部参照用)
@@ -49,15 +49,34 @@ function present(){
 //表示(内部実行用)
 function present_sub(){
   if(rid<maxrid){
-    var disp = steps[rid].map(function(i){return "<div class='bar' style='width:" + i*3 + "pt'></div>";});
+    var disp = create_bar();
     rid++;
     $("status").innerHTML = "sorting now ... (" + rid + "/" + maxrid + " steps)";
     $("main").innerHTML = disp.join("");
 
-    setTimeout("present_sub()",10);
+    setTimeout("present_sub()",50);
   } else {
     $("status").innerHTML = "finish sorting!(" + maxrid + " steps)";
   }
+}
+
+function create_bar(){
+  var bars = steps[rid][0];
+  var base = steps[rid][1];
+  var comp = steps[rid][2];
+  return bars.map(function(i,idx){
+    return "<div class='" + bar_class(idx,base,comp) + "' style='width:" + i*4 + "pt'></div>";
+  });
+}
+
+function bar_class(no, base, comp){
+  var klass = 'bar';
+  if (no == base){
+    klass = 'base';
+  } else if(no == comp) {
+    klass = 'comp';
+  }
+  return klass;
 }
 
 //バブルソート
@@ -72,6 +91,16 @@ function busort(num){
       }
     }
   k=j;
+  }
+}
+
+function sesort(num){
+  for(i=0;i<num.length;i++){
+    for(j=i+1;j<num.length;j++){
+      if(num[i]>num[j]){
+        swap(num,i,j);
+      }
+    }
   }
 }
 

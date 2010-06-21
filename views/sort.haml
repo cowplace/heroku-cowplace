@@ -8,6 +8,6 @@
 - content_for :leftbar do
   %p please select sorting algorithm
   %ul
-    - @kinds.each do |key, val|
+    - @kinds.each do |pair|
       %li
-        %a{:href => "#", :onclick => "sort('#{key}')"}= val
+        %a{:href => "#", :onclick => "sort('#{pair.first}')"}= pair.last
