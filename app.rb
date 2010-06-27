@@ -35,6 +35,10 @@ get '/visualized_sorting_algorithm' do
   haml :sort
 end
 
+get '/multi_particles' do
+  haml :multi_particles
+end
+
 get '/top' do
   haml :index
 end

@@ -1,0 +1,16 @@
+- content_for :header do
+  = javascript_include_tag 'processing'
+  = javascript_include_tag 'excanvas'
+  = javascript_include_tag 'processing_init'
+  %script{:id => 'processing-code', :type => 'application/processing'}= `cat views/processing/multi_particles.processing`
+- content_for :title do
+  %title= title_with_name('multi particles')
+- content_for :navigation do
+  = breadcrumb_list([:top, :multi_particles])
+- content_for :leftbar do
+  %p please push to start
+  %div
+    <button onclick="init();">Start</button>
+
+%div
+  <canvas width="800" height="400"></canvas>
