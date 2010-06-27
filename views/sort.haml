@@ -1,5 +1,5 @@
 - content_for :header do
-  = javascript_include_tag 'sort'
+  = javascript_include_tag 'exsort'
   = stylesheet_link_tag 'sort'
 - content_for :title do
   %title= title_with_name('visualized sorting algorithm')
@@ -10,4 +10,4 @@
   %ul
     - @kinds.each do |pair|
       %li
-        %a{:href => "#", :onclick => "sort('#{pair.first}')"}= pair.last
+        %a{:href => "#", :class => "sort", :id => pair.first}= pair.last

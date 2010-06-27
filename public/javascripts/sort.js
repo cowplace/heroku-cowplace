@@ -1,264 +1,269 @@
-//交換回数カウントと途中経過の保存用
-var rid = 0;
-var maxrid = 0;
-var steps = $A([]);
+var Sorter = Class.create({
+  rid: 0,
+  maxrid: 0,
+  steps: $A([]),
+  initialize: function(){
+    this.reset_array();
+  },
+  reset_array: function(){
+    this.maxrid = 0;
+    this.steps.clear();
+    this.len = 70;
+    this.num = $A($R(1,this.len));
+    this.shuffle();
+    this.reserved(0, 0);
+  },
+  shuffle: function(){
+    for(var i=0;i<this.len;i++){
+      this.swap_without_record(i,(Math.random()*this.len).floor());
+    }
+  },
+  swap_without_record: function(i,j){
+    var temp = this.num[i];
+    this.num[i] = this.num[j];
+    this.num[j] = temp;
+  },
+  swap: function(i,j){
+    this.swap_without_record(i,j);
+    this.reserved(i, j);
+  },
+  reserved: function(base, comp){
+    this.maxrid++;
+    this.steps.push([[].concat(this.num), base, comp]);
+  },
+  present: function(){
+    this.rid=0;
+    $("main").innerHTML = "";
+    this.present_sub();
+  },
+  present_sub: function(){
+    if(this.rid<this.maxrid){
+      var disp = this.create_bar();
+      this.rid++;
+      $("status").innerHTML = "sorting now ... (" + this.rid + "/" + this.maxrid + " steps)";
+      $("main").innerHTML = disp.join("");
+      setTimeout(function(obj){return function(){obj.present_sub()};}(this),50);
+    } else {
+      $("status").innerHTML = "finish sorting!(" + this.maxrid + " steps)";
+    }
+  },
+  create_bar: function(){
+    var bars = this.steps[this.rid][0];
+    var base = this.steps[this.rid][1];
+    var comp = this.steps[this.rid][2];
+    return function(obj){
+      return bars.map(function(i,idx){
+        return "<div class='" + obj.bar_class(idx,base,comp) + "' style='width:" + i*4 + "pt'></div>";
+      });
+    }(this);
+  },
+  bar_class: function(no, base, comp){
+    var class_of_bar = 'bar';
+    if (no == base){
+      class_of_bar = 'base';
+    } else if(no == comp) {
+      class_of_bar = 'comp';
+    }
+    return class_of_bar;
+  },
 
-//初期化
-function init(){
-  steps.clear();
-  maxrid=0;
-  var num = $A($R(1,70));
-  shuffle(num);
-  reserved(num, 0, 0);
-  return num;
-}
-
-//適当にまぜる
-function shuffle(num){
-  for(i=num.length-1;i>=0;i--){
-    var j = Math.ceil(Math.random()*(num.length-1));
-    swap_without_record(num,i,j);
-  }
-}
-
-function swap_without_record(num,i,j){
-  var temp = num[i];
-  num[i] = num[j];
-  num[j] = temp;
-}
-
-//交換し途中経過を記録
-function swap(num,i,j){
-  swap_without_record(num,i,j);
-  reserved(num, i, j);
-}
-
-//途中経過を一度に記録して後に表示するための記憶
-function reserved(num, base, comp){
-  maxrid++;
-  steps.push([[].concat(num), base, comp]);
-}
-
-//表示(外部参照用)
-function present(){
-  rid=0;
-  $("main").innerHTML = "";  
-  present_sub();
-}
-
-//表示(内部実行用)
-function present_sub(){
-  if(rid<maxrid){
-    var disp = create_bar();
-    rid++;
-    $("status").innerHTML = "sorting now ... (" + rid + "/" + maxrid + " steps)";
-    $("main").innerHTML = disp.join("");
-
-    setTimeout("present_sub()",50);
-  } else {
-    $("status").innerHTML = "finish sorting!(" + maxrid + " steps)";
-  }
-}
-
-function create_bar(){
-  var bars = steps[rid][0];
-  var base = steps[rid][1];
-  var comp = steps[rid][2];
-  return bars.map(function(i,idx){
-    return "<div class='" + bar_class(idx,base,comp) + "' style='width:" + i*4 + "pt'></div>";
-  });
-}
-
-function bar_class(no, base, comp){
-  var klass = 'bar';
-  if (no == base){
-    klass = 'base';
-  } else if(no == comp) {
-    klass = 'comp';
-  }
-  return klass;
-}
-
-//バブルソート
-function busort(num){
-  var k = num.length-1;
-  while(k>=0){
-    var j = -1;
-    for(i=1;i<=k;i++){
-      if(num[i-1]>num[i]){
-        j=i-1;
-        swap(num,i,j);
+  busort: function(){
+    var j=1;
+    for(var i=0;i<this.len;i++){
+      for(j=1;j<this.len-i+1;j++){
+        if(this.num[j-1]>this.num[j]){
+          this.swap(j-1,j);
+        }
       }
     }
-  k=j;
-  }
-}
+  },
 
-function sesort(num){
-  for(i=0;i<num.length;i++){
-    for(j=i+1;j<num.length;j++){
-      if(num[i]>num[j]){
-        swap(num,i,j);
+  sesort: function(){
+    var j=1;
+    for(var i=0;i<this.len;i++){
+      for(j=i+1;j<this.len;j++){
+        if(this.num[i]>this.num[j]){
+          this.swap(i,j);
+        }
       }
     }
-  }
-}
+  },
 
-//挿入ソート
-function insort(num){
-  for(j=1;j<num.length;j++){
-    var key = num[j];
-    for(i=j-1;i>=0;i--){
-      if(num[i]>key){
-        swap(num,i,i+1);
-      } else {
+  insort: function(){
+    var j=0;
+    for(var i=1;i<this.len;i++){
+      for(j=i-1;j>=0;j--){
+        if(this.num[j]>this.num[j+1]){
+          this.swap(j,j+1);
+        } else {
+          break;
+        }
+      }
+    }
+  },
+
+  heapLeft: function(i){
+    return 2*i+1;
+  },
+  heapRight: function(i){
+    return 2*i+2;
+  },
+  heapify: function(i,heapsize){
+    var left = this.heapLeft(i);
+    var right = this.heapRight(i);
+    if(left<heapsize && this.num[left]>this.num[i]){
+      var largest = left;
+    } else {
+      var largest = i;
+    }
+    if(right<heapsize && this.num[right]>this.num[largest]){
+      var largest = right;
+    }
+    if(largest != i){
+      this.swap(i,largest);
+      this.heapify(largest,heapsize);
+    }
+  },
+  buildHeap: function(){
+    var heapsize=this.len;
+    for(i=((heapsize-1)/2).floor();i>=0;i--){
+      this.heapify(i,heapsize);
+    }
+    return heapsize;
+  },
+  hesort: function(){
+    var heapsize = this.buildHeap();
+    for(i=this.len-1;i>0;i--){
+      this.swap(0,i);
+      this.heapify(0,--heapsize);
+    }
+  },
+
+  qusort: function(){
+    this.qusort_sub(0,this.len-1);
+  },
+  qusort_sub: function(start,end){
+    var x = (this.num[start] + this.num[end])/2;
+    var i = start;
+    var j = end;
+    while(true){
+      while(this.num[i++]<x){}
+      while(x<this.num[j--]){}
+      if(--i>=++j){
         break;
       }
+      this.swap(i++,j--);
     }
-    num[i+1] = key;
-  }
-}
+    if(start<i-1){
+      this.qusort_sub(start,i-1);
+    }
+    if(j+1<end){
+      this.qusort_sub(j+1,end);
+    }
+  },
 
-//ヒープソート
-function heapLeft(i){
-  return 2*i+1;
-}
-
-function heapRight(i){
-  return 2*i+2;
-}
-
-function heapify(num,i,heapsize){
-  var left = heapLeft(i);
-  var right = heapRight(i);
-  if(left<=heapsize && num[left]>num[i]){
-    var largest = left;
-  } else {
-    var largest = i;
-  }
-  if(right<=heapsize && num[right]>num[largest]){
-    var largest = right;
-  }
-  if(largest != i){
-    swap(num,i,largest);
-    heapify(num,largest,heapsize);
-  }
-}
-
-function buildHeap(num){
-  var heapsize=num.length-1;
-  for(i=Math.floor((num.length-1)/2);i>=0;i--){
-    heapify(num,i,heapsize);
-  }
-  return heapsize;
-}
-
-function hesort(num){
-  var heapsize = buildHeap(num);
-  for(i=num.length-1;i>0;i--){
-    swap(num,0,i);
-    heapsize--;
-    heapify(num,0,heapsize);
-  }
-}
-
-//クイックソート
-function qusort(num){
-  qusort_sub(num,0,num.length-1);
-}
-
-function qusort_sub(num,start,end){
-  var x = num[Math.floor((start+end)/2)];
-  var i = start;
-  var j = end;
-  while(true){
-    while(num[i]<x) i++;
-    while(x<num[j]) j--;
-    if(i>=j) break;
-    swap(num,i,j);
-    i++;
-    j--;
-  }
-  if(start<i-1) qusort_sub(num,start,i-1);
-  if(j+1<end) qusort_sub(num,j+1,end);
-}
-
-//SHELLソート
-function shsort(num){
-  var h = 13;
-  while(h<num.length-1){
-    h = 3*h+1;
-  }
-  h = Math.round(h/9);
-  while(h>0){
-    for(i=h;i<num.length;i++){
-      var key = num[i];
-      for(j=i-h;j>=0 && num[j]>key;j -= h){
-        swap(num,j+h,j);
+  shsort: function(){
+    var h = 13;
+    while(h<this.len-1){
+      h = 3*h+1;
+    }
+    h = Math.round(h/9);
+    var i,j,key;
+    while(h>0){
+      for(i=h;i<this.len;i++){
+        key = this.num[i];
+        for(j=i-h;j>=0 && this.num[j]>key;j -= h){
+          this.swap(j+h,j);
+        }
+        this.num[j+h]=key;
       }
-      num[j+h]=key;
+      h = Math.round(h/3);
     }
-    h = Math.round(h/3);
-  }
-}
+  },
 
-//櫛ソート
-function cosort(num){
-  var shr = 1.3;
-  var gap = num.length;
-  do{
-    gap=Math.floor(gap/shr);
-    if(gap==0){
-      gap=1;
-    }
-    if(gap==9 || gap==10){
-      gap=11;
-    }
-    var swapped = false;
-    for(i=0,j=gap;j<num.length;i++,j++){
-      if(num[i]>num[j]){
-        swap(num,i,j);
-        swapped=true;
+  cosort: function(){
+    var shr = 1.3;
+    var gap = this.len;
+    var i,j,swapped;
+    do{
+      gap=(gap/shr).floor();
+      if(gap==0){
+        gap=1;
+      }
+      if(gap==9 || gap==10){
+        gap=11;
+      }
+      swapped = false;
+      for(i=0,j=gap;j<this.len;i++,j++){
+        if(this.num[i]>this.num[j]){
+          this.swap(i,j);
+          swapped=true;
+        }
+      }
+    } while(gap>1 || swapped);
+  },
+
+  mesort: function(){
+    this.mesort_sub(0,this.len-1);
+  },
+  mesort_sub: function(first,last){
+    if(first >= last) return;
+    var mid = Math.floor((first+last)/2);
+    this.mesort_sub(first,mid);
+    this.mesort_sub(mid+1,last);
+    this.merge(first,mid,last);
+  },
+  merge: function(first,mid,last){
+    var lo=first;
+    var hi=last;
+    var end_lo = mid;
+    var start_hi = mid+1;
+    while((first<=end_lo) && (start_hi<=hi)){
+      if(this.num[lo]<this.num[start_hi]){
+        lo++;
+      } else {
+        for(var k=start_hi-1;k>=lo;k--){
+          this.swap(k,k+1);
+        }
+        lo++;
+        end_lo++;
+        start_hi++;
       }
     }
-  } while(gap>1 || swapped);
-}
-
-//マージソート
-function mesort(num){
-  mesort_sub(num,0,num.length-1);
-}
-
-function mesort_sub(num,first,last){
-  if(first >= last) return;
-  var mid = Math.floor((first+last)/2);
-  mesort_sub(num,first,mid);
-  mesort_sub(num,mid+1,last);
-  merge(num,first,mid,last);
-}
-
-function merge(num,first,mid,last){
-  var lo=first;
-  var hi=last;
-  var end_lo = mid;
-  var start_hi = mid+1;
-  while((first<=end_lo) && (start_hi<=hi)){
-    if(num[lo]<num[start_hi]){
-      lo++;
-    } else {
-      for(var k=start_hi-1;k>=lo;k--){
-        swap(num,k,k+1);
-      }
-      lo++;
-      end_lo++;
-      start_hi++;
-    }
   }
-}
+});
+
+var singleton = function(SomeClass){
+  var NewClass = function(){
+    throw new Error("This is Singleton-Pattern Class. Use self.getInstance().");
+  };
+  NewClass.__instance__ = null;
+  NewClass.getInstance = function(){
+    if (this.__instance__ === null){
+      this.__instance__ = applyNew(SomeClass, arguments);
+    }
+    return this.__instance__;
+  };
+  function applyNew(cls, args){
+    var Tmp = function(){};
+    Tmp.prototype = cls.prototype;
+    var instance = new Tmp;
+    cls.apply(instance, args || []);
+    return instance;
+  };
+  return NewClass;
+};
+Sorter = singleton(Sorter);
 
 function sort(str){
-  var num = init();
-  str = str + "sort(num)";
-  eval(str);
-  present();
+  sorter = Sorter.getInstance();
+  sorter.reset_array();
+  sorter[str + 'sort']();
+  sorter.present();
 }
+
+document.observe('dom:loaded',function(){
+  $$('.sort').each(function(elem){
+    elem.observe('click',function(){sort(elem.id);});
+  });
+});
