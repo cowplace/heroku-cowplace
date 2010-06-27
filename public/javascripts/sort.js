@@ -33,36 +33,40 @@ var Sorter = Class.create({
   },
   present: function(){
     this.rid=0;
-    $("main").innerHTML = "";
+    var stage=$('main');
+    stage.innerHTML = '';
+    for(var i=0;i<this.len;i++){
+      stage.insert('<div class="bar" />');
+    }
     this.present_sub();
   },
   present_sub: function(){
     if(this.rid<this.maxrid){
-      var disp = this.create_bar();
+      this.modified_bar();
       this.rid++;
       $("status").innerHTML = "sorting now ... (" + this.rid + "/" + this.maxrid + " steps)";
-      $("main").innerHTML = disp.join("");
       setTimeout(function(obj){return function(){obj.present_sub()};}(this),50);
     } else {
       $("status").innerHTML = "finish sorting!(" + this.maxrid + " steps)";
     }
   },
-  create_bar: function(){
+  modified_bar: function(){
     var bars = this.steps[this.rid][0];
     var base = this.steps[this.rid][1];
     var comp = this.steps[this.rid][2];
     return function(obj){
-      return bars.map(function(i,idx){
-        return "<div class='" + obj.bar_class(idx,base,comp) + "' style='width:" + i*4 + "pt'></div>";
-      });
+        $$('.bar').each(function(bar,idx){
+            bar.setStyle('width: ' + bars[idx]*4 + 'pt;');
+            bar.className = obj.bar_class(idx,base,comp);
+        });
     }(this);
   },
   bar_class: function(no, base, comp){
     var class_of_bar = 'bar';
     if (no == base){
-      class_of_bar = 'base';
+      class_of_bar += ' base';
     } else if(no == comp) {
-      class_of_bar = 'comp';
+      class_of_bar += ' comp';
     }
     return class_of_bar;
   },
