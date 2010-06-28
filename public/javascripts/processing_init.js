@@ -1,8 +1,8 @@
 function init() {
-  var canvas = document.getElementsByTagName('canvas')[0];
+  var canvas = $('canvas');
 
   // Processing のソースコードが書かれた script 要素
-  var codeElm = document.getElementById('processing-code');
+  var codeElm = $('processing-code');
   // 要素の内容を取得する
   var code = codeElm.textContent || codeElm.innerText;
 
