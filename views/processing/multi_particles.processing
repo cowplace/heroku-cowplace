@@ -8,21 +8,22 @@ void setup() {
 }
 
 void draw() {
-    background(255);
+    background(0);
     int numBalls = balls.length;
+    Ball ball0;
     for (int i = 0; i < numBalls; i++){
         balls[i].move();
     }
 
     for (int i = 0; i < numBalls; i++){
-        Ball ball0 = balls[i];
+        ball0 = balls[i];
         for (int j = i+1; j < numBalls; j++){
             ball0.spring(balls[j]);
         }
     }
 
     for (int i = 0; i < numBalls; i++){
-        Ball ball0 = balls[i];
+        ball0 = balls[i];
         for (int j = i+1; j < numBalls; j++){
             ball0.checkCollisionWithBall(balls[j]);
         }
@@ -35,11 +36,11 @@ class Ball {
     Ball () {
         x = random(width);
         y = random(height);
-        r = random(255);
-        g = random(255);
-        b = random(255);
-        radius = 10;
-        mass = sq(radius) / 1000;
+        r = 255;
+        g = 255;
+        b = 255;
+        radius = 7;
+        mass = sq(radius);
         xvel = random(1) * 10 - 5;
         yvel = random(1) * 10 - 5;
     }
