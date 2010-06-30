@@ -36,6 +36,7 @@ get '/visualized_sorting_algorithm' do
 end
 
 get '/multi_particles' do
+  @kinds = %w(springs gravities)
   haml :multi_particles
 end
 

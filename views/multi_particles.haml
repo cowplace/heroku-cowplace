@@ -2,7 +2,9 @@
   = javascript_include_tag 'processing'
   = javascript_include_tag 'excanvas'
   = javascript_include_tag 'processing_init'
-  %script{:id => 'processing-code', :type => 'application/processing'}= `cat views/processing/multi_particles.processing`
+  - @kinds.each do |kind|
+    %script{:id => kind, :type => 'application/processing'}
+      = `cat views/processing/#{kind}.processing`
 - content_for :title do
   %title= title_with_name('multi particles')
 - content_for :navigation do
@@ -10,7 +12,9 @@
 - content_for :leftbar do
   %p please push to start
   %div
-    <button onclick="init();">Start</button>
+    %ul
+      - @kinds.each do |kind|
+        %li
+          %a{:href => '#', :onclick => "init('#{kind}');"}= kind
 
-%div
-  <canvas id="canvas"  width="800" height="400"></canvas>
+%div{:id => 'canvas_field'}
