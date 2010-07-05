@@ -1,132 +1,40 @@
 Ball balls = new Ball[50];
 
 void setup() {
-    size(800, 400);
-    for (int i = 0; i < balls.length; i ++){
-        balls[i] = new Ball();
-    }
-}
-
-void draw() {
-    background(255);
-    int numBalls = balls.length;
-    Ball ball0;
-
-    for (int i = 0; i < numBalls; i++){
-        ball0 = balls[i];
-        for (int j = i+1; j < numBalls; j++){
-            ball0.spring(balls[j]);
-        }
-        for (int j = i+1; j < numBalls; j++){
-            ball0.checkCollisionWithBall(balls[j]);
-        }
-    }
-
-    for (int i = 0; i < numBalls; i++){
-        balls[i].move();
-    }
-}
-
-class Ball {
-    float x, y, xvel, yvel, r, g, b, radius, mass;
-
-    Ball () {
-        x = random(width);
-        y = random(height);
-        r = random(255);
-        g = random(255);
-        b = random(255);
-        radius = 7;
-        mass = sq(radius);
-        xvel = random(1) * 10 - 5;
-        yvel = random(1) * 10 - 5;
-    }
-
-    void move() {
-        x += xvel, y += yvel;
-        checkCollisionWithWall();
-        fill(r,g,b)
-        stroke(r, g, b);
-        ellipse(x,y,radius*2,radius*2);
-    }
-
-    void checkCollisionWithWall(){
-        if (x - radius < 0){
-            x = 0 + radius;
-            xvel *= -1.0;
-        } else if (x + radius > width){
-            x = width - radius;
-            xvel *= -1.0;
-        } else if (y - radius < 0){
-            y = 0 + radius;
-            yvel *= -1.0;
-        } else if (y + radius > height){
-            y = height -radius;
-            yvel *= -1.0;
-        }
-    }
-
-    void checkCollisionWithBall(Ball ball1){
-        float dx = ball1.x - x;
-        float dy = ball1.y - y;
-        float dist = sqrt(sq(dx) + sq(dy));
-        float minDist = radius + ball1.radius;
-        if (dist < minDist){
-            float cos = dx / dist;
-            float sin = dy / dist;
-            ball1.x = x + cos * minDist;
-            ball1.y = y + sin * minDist;
-
-            Point vel0 = rotate(xvel, yvel, sin, cos, true);
-            Point vel1 = rotate(ball1.xvel, ball1.yvel, sin, cos, true);
-            float vxTotal = vel0.x - vel1.x;
-            vel0.x = ((mass - ball1.mass) * vel0.x + 2 * ball1.mass * vel1.x) / (mass + ball1.mass);
-            vel1.x = vxTotal + vel0.x;
-            Point vel0F = rotate(vel0.x, vel0.y, sin, cos, false);
-            Point vel1F = rotate(vel1.x, vel1.y, sin, cos, false);
-            xvel = vel0F.x;
-            yvel = vel0F.y;
-            ball1.xvel = vel1F.x;
-            ball1.yvel = vel1F.y;
-        }
-    }
-
-    Point rotate(float px, float py, float sin, float cos, bool reverse){
-        Point result = new Point(0,0);
-        if (reverse){
-            result.x = px*cos+py*sin;
-            result.y = py*cos-px*sin;
-        } else {
-            result.x = px*cos-py*sin;
-            result.y = py*cos+px*sin;
-        }
-        return result;
-    }
-
-    void spring(Ball ball1){
-        float minDist = 100;
-        float springArgument = 0.001;
-        float dx = ball1.x - x;
-        float dy = ball1.y - y;
-        float dist = sqrt(sq(dx) + sq(dy));
-        if (dist < minDist){
-            stroke(0, 0, 0, (1-dist/minDist)*255);
-            line(x,y,ball1.x,ball1.y);
-            float ax = dx * springArgument;
-            float ay = dy * springArgument;
-            xvel += ax;
-            yvel += ay;
-            ball1.xvel -= ax;
-            ball1.yvel -= ay;
-        }
-    }
-}
-
-class Point {
-  float x,y;
-  Point (float px, float py){
-    x = px;
-    y = py;
+  size(800, 400);
+  for (int i = 0; i < balls.length; i ++){
+    balls[i] = new Ball();
   }
 }
 
+void draw() {
+  background(255);
+  int numBalls = balls.length;
+  Ball ball0;
+
+  for (int i = 0; i < numBalls; i++){
+    balls[i].move();
+  }
+
+  for (int i = 0; i < numBalls; i++){
+    ball0 = balls[i];
+    for (int j = i+1; j < numBalls; j++){
+      ball0.spring(balls[j]);
+    }
+  }
+
+  for (int i = 0; i < numBalls; i++){
+    ball0 = balls[i];
+    for (int j = i+1; j < numBalls; j++){
+      ball0.checkCollisionWithBall(balls[j]);
+    }
+  }
+
+  for (int i = 0; i < numBalls; i++){
+    balls[i].show();
+  }
+}
+
+void mousePressed(){
+  exit();
+}

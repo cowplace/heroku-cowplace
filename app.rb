@@ -3,7 +3,9 @@ require 'haml'
 require 'sass'
 require 'sinatra'
 require 'sinatra_more/markup_plugin'
+require 'sinatra_more/render_plugin'
 Sinatra::Base.register SinatraMore::MarkupPlugin
+Sinatra::Base.register SinatraMore::RenderPlugin
 
 get '/' do
   haml :index
@@ -40,6 +42,15 @@ get '/multi_particles' do
   haml :multi_particles
 end
 
+get '/visualized_list' do
+  @kinds = (1..3).map do |i|
+    (0..(rand(3)-i+1)).map do |j|
+      (0..j).to_a
+    end
+  end
+  haml :list
+end
+
 get '/top' do
   haml :index
 end
@@ -56,5 +67,34 @@ helpers do
 
   def breadcrumb_list(routes=[])
     return routes.map {|pos| link_to(pos,pos)}.join(escape_html(' > '))
+  end
+
+  def list2table(list)
+    car = list.first
+    if car.nil? then
+      return '*'
+    elsif car.is_a?(Array) then
+      return haml_template(
+        'partial/list_to_table_if_tree',
+        {
+          :layout => false,
+          :locals => {
+            :car => list2table(car),
+            :cdr => list2table(list[1..-1])
+          }
+        }
+      )
+    else
+      return haml_template(
+        'partial/list_to_table_if_serial',
+        {
+          :layout => false,
+          :locals => {
+            :car => car.inspect,
+            :cdr => list2table(list[1..-1])
+          }
+        }
+      )
+    end
   end
 end

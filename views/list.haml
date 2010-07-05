@@ -1,0 +1,12 @@
+- content_for :header do
+  = stylesheet_link_tag 'list'
+- content_for :title do
+  %title= title_with_name('visualized list')
+- content_for :navigation do
+  = breadcrumb_list([:top, :visualized_list])
+- content_for :leftbar do
+  %p please see array in style of tree
+- content_for :status do
+  %p= "#{@kinds.inspect} is below ... "
+
+= list2table(@kinds)

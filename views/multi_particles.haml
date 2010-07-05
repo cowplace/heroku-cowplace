@@ -5,6 +5,7 @@
   - @kinds.each do |kind|
     %script{:id => kind, :type => 'application/processing'}
       = `cat views/processing/#{kind}.processing`
+      = `cat views/processing/ball.processing`
 - content_for :title do
   %title= title_with_name('multi particles')
 - content_for :navigation do
