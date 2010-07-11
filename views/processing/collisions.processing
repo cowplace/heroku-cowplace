@@ -1,0 +1,33 @@
+Ball balls = new Ball[50];
+ 
+void setup() {
+    size(800, 400);
+    for (int i = 0; i < balls.length; i ++){
+        balls[i] = new Ball();
+    }
+}
+ 
+void draw() {
+    background(255);
+    int numBalls = balls.length;
+    Ball ball0;
+
+    for (int i = 0; i < numBalls; i++){
+        balls[i].move();
+    }
+
+    for (int i = 0; i < numBalls; i++){
+        ball0 = balls[i];
+        for (int j = i+1; j < numBalls; j++){
+            ball0.checkCollisionWithBall(balls[j]);
+        }
+    }
+
+    for (int i = 0; i < numBalls; i++){
+        balls[i].show();
+    }
+}
+
+void mousePressed(){
+  exit();
+}

@@ -24,10 +24,10 @@ void draw() {
   }
 
   for (int i = 0; i < numBalls; i++){
-    ball0 = balls[i];
-    for (int j = i+1; j < numBalls; j++){
-      ball0.checkCollisionWithBall(balls[j]);
-    }
+      ball0 = balls[i];
+      for (int j = i+1; j < numBalls; j++){
+          ball0.checkCollisionWithBall(balls[j]);
+      }
   }
 
   for (int i = 0; i < numBalls; i++){

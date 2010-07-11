@@ -8,10 +8,11 @@ Sinatra::Base.register SinatraMore::MarkupPlugin
 Sinatra::Base.register SinatraMore::RenderPlugin
 
 get '/' do
+  @navi = breadcrumb_list
   haml :index
 end
 
-get '/profile' do
+get '/author' do
   @kinds = [
     [:name, 'Yuki Ushiba'],
     [:twitter, '@cowplace'],
@@ -20,7 +21,8 @@ get '/profile' do
     [:language, 'ruby'],
     [:interest, 'functional language']
   ]
-  haml :profile
+  @navi = breadcrumb_list(:author)
+  haml :author
 end
 
 get '/visualized_sorting_algorithm' do
@@ -34,25 +36,24 @@ get '/visualized_sorting_algorithm' do
     [:co, 'comb'],
     [:me, 'merge(inplace)']
   ]
+  @navi = breadcrumb_list(:visualized_sorting_algorithm)
   haml :sort
 end
 
 get '/multi_particles' do
-  @kinds = %w(springs gravities)
+  @kinds = %w(collisions springs gravities)
+  @navi = breadcrumb_list(:multi_particles)
   haml :multi_particles
 end
 
 get '/visualized_list' do
-  @kinds = (1..3).map do |i|
-    (0..(rand(3)-i+1)).map do |j|
-      (0..j).to_a
-    end
-  end
+  @kinds = list_sample
+  @navi = breadcrumb_list(:visualized_list)
   haml :list
 end
 
 get '/top' do
-  haml :index
+  redirect '/'
 end
 
 get '/stylesheets/:stylesheet.css' do
@@ -66,7 +67,7 @@ helpers do
   end
 
   def breadcrumb_list(routes=[])
-    return routes.map {|pos| link_to(pos,pos)}.join(escape_html(' > '))
+    return ([:top] + [routes]).flatten.map {|pos| link_to(pos,pos)}.join(escape_html(' > '))
   end
 
   def list2table(list)
@@ -96,5 +97,17 @@ helpers do
         }
       )
     end
+  end
+
+  def list_sample(depth=3)
+    if depth > 0 then
+      rnd = rand
+      if rnd < 0.6 then
+        return [list_sample(depth-1), list_sample(depth-1)]
+      elsif rnd < 0.9 then
+        return list_sample(depth-1) + list_sample(depth-1)
+      end
+    end
+    return [0]
   end
 end
