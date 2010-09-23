@@ -1,11 +1,3 @@
-- content_for :header do
-  = javascript_include_tag 'processing'
-  = javascript_include_tag 'excanvas'
-  = javascript_include_tag 'processing_init'
-  - @kinds.each do |kind|
-    %script{:id => kind, :type => 'application/processing'}
-      = `cat views/processing/#{kind}.processing`
-      = `cat views/processing/ball.processing`
 - content_for :title do
   %title= title_with_name('multi particles')
 - content_for :leftbar do
@@ -14,6 +6,6 @@
     %ul
       - @kinds.each do |kind|
         %li
-          %a{:href => '#', :onclick => "init('#{kind}');"}= kind
+          %a{:href => "/multi_particles/#{kind}"}= kind
 
 %div{:id => 'stage'}

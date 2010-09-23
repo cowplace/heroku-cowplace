@@ -48,6 +48,17 @@ get '/multi_particles' do
   haml :multi_particles
 end
 
+get '/multi_particles/:kind' do |kind|
+  @kinds = %w(collisions springs gravities)
+  if @kinds.include?(kind) then
+    @kind = kind
+    @navi = breadcrumb_list([:multi_particles, @kind])
+    haml :processing
+  else
+    redirect '/multi_particles'
+  end
+end
+
 get '/visualized_list' do
   @kinds = list_sample
   @navi = breadcrumb_list(:visualized_list)
