@@ -43,7 +43,7 @@ get '/visualized_sorting_algorithm' do
 end
 
 get '/multi_particles' do
-  @kinds = %w(collisions springs gravities)
+  @kinds = %w(collisions springs gravities expansion)
   @navi = breadcrumb_list(:multi_particles)
   haml :multi_particles
 end
