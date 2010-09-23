@@ -77,43 +77,6 @@ class Ball {
     }
     return result;
   }
-
-  void spring(Ball ball1){
-    float minDist = 150;
-    float dx = ball1.x - x;
-    float dy = ball1.y - y;
-    float dist = sqrt(sq(dx) + sq(dy));
-    float springArgument = 0.001 * (dist-minDist)/minDist;
-    if (dist < minDist){
-      stroke(0, 0, 0, (1-dist/minDist)*255);
-      line(x,y,ball1.x,ball1.y);
-      float ax = dx * springArgument;
-      float ay = dy * springArgument;
-      xvel += ax;
-      yvel += ay;
-      ball1.xvel -= ax;
-      ball1.yvel -= ay;
-    }
-  }
-
-  void gravitate(Ball ball1){
-    float minDist = 150;
-    float dx = ball1.x - x;
-    float dy = ball1.y - y;
-    float distSQ = sq(dx) + sq(dy);
-    float dist = sqrt(distSQ);
-    if(dist < minDist){
-      stroke(0, 0, 0, (1-dist/minDist)*255);
-      line(x,y,ball1.x,ball1.y);
-      float force = mass * ball1.mass / distSQ;
-      float ax = force * dx / dist;
-      float ay = force * dy / dist;
-      xvel += ax / mass;
-      yvel += ay / mass;
-      ball1.xvel -= ax / ball1.mass;
-      ball1.yvel -= ay / ball1.mass;
-    }
-  }
 }
 
 class Point {

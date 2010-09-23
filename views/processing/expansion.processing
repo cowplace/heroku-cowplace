@@ -1,0 +1,86 @@
+class ExpandBall extends Ball {
+  float vradius;
+
+  ExpandBall (){
+    super();
+    xvel = 0;
+    yvel = 0;
+    radius = 1;
+    vradius = 1;
+    reposition();
+  }
+
+  void reposition(){
+    int numBalls = balls.size();
+    boolean non_cross;
+    while(true){
+      non_cross = true;
+      for(int i=0; i<numBalls; i++){
+        if(checkCrossWithBall(balls.get(i))){
+          non_cross = false;
+          break;
+        }
+      }
+      if(non_cross){
+        break;
+      } else {
+        x = random(width);
+        y = random(height);
+      }
+    }
+  }
+
+  void expand(){
+    radius += vradius;
+  }
+
+  boolean checkCrossWithBall(Ball ball1){
+    float dx = ball1.x - x;
+    float dy = ball1.y - y;
+    float dist = sqrt(sq(dx) + sq(dy));
+    float minDist = radius + ball1.radius;
+    return (dist < minDist);
+  }
+}
+
+ArrayList balls = new ArrayList();
+
+void setup() {
+  size(800, 400);
+  for (int i = 0; i < 20; i ++){
+    balls.add(new ExpandBall());
+  }
+}
+ 
+void draw() {
+  background(255);
+  int numBalls = balls.size();
+  ExpandBall ball0;
+  ExpandBall ball1;
+
+  for (int i = 0; i < numBalls; i++){
+    balls.get(i).expand();
+  }
+
+  for (int i = 0; i < numBalls; i++){
+    ball0 = balls.get(i);
+    if (ball0.vradius != 0){
+      for (int j = 0; j < numBalls; j++){
+        ball1 = balls.get(j);
+        if((ball0 != ball1) && ball0.checkCrossWithBall(ball1)){
+          ball0.vradius = 0;
+          balls.add(new ExpandBall());
+          break;
+        }
+      }
+    }
+  }
+
+  for (int i = 0; i < numBalls; i++){
+    balls.get(i).show();
+  }
+
+  if(numBalls > 500){
+    noloop();
+  }
+}

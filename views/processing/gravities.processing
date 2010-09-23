@@ -1,16 +1,43 @@
-Ball balls = new Ball[50];
+class GravityBall extends Ball {
+  GravityBall() {
+    super();
+    xvel = 0;
+    yvel = 0;
+  }
+
+  void gravitate(GravityBall ball1){
+    float minDist = 150;
+    float dx = ball1.x - x;
+    float dy = ball1.y - y;
+    float distSQ = sq(dx) + sq(dy);
+    float dist = sqrt(distSQ);
+    if(dist < minDist){
+      stroke(0, 0, 0, (1-dist/minDist)*255);
+      line(x,y,ball1.x,ball1.y);
+      float force = mass * ball1.mass / distSQ;
+      float ax = force * dx / dist;
+      float ay = force * dy / dist;
+      xvel += ax / mass;
+      yvel += ay / mass;
+      ball1.xvel -= ax / ball1.mass;
+      ball1.yvel -= ay / ball1.mass;
+    }
+  }
+}
+
+GravityBall balls = new GravityBall[50];
  
 void setup() {
     size(800, 400);
     for (int i = 0; i < balls.length; i ++){
-        balls[i] = new Ball();
+        balls[i] = new GravityBall();
     }
 }
  
 void draw() {
     background(255);
     int numBalls = balls.length;
-    Ball ball0;
+    GravityBall ball0;
 
     for (int i = 0; i < numBalls; i++){
         balls[i].move();
@@ -33,8 +60,4 @@ void draw() {
     for (int i = 0; i < numBalls; i++){
         balls[i].show();
     }
-}
-
-void mousePressed(){
-  exit();
 }

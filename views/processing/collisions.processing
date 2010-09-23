@@ -27,7 +27,3 @@ void draw() {
         balls[i].show();
     }
 }
-
-void mousePressed(){
-  exit();
-}

@@ -49,7 +49,7 @@ get '/multi_particles' do
 end
 
 get '/multi_particles/:kind' do |kind|
-  @kinds = %w(collisions springs gravities)
+  @kinds = %w(collisions springs gravities expansion)
   if @kinds.include?(kind) then
     @kind = kind
     @navi = breadcrumb_list([:multi_particles, @kind])
