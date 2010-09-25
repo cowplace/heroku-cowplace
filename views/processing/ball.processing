@@ -17,6 +17,12 @@ class Ball {
     fill(r,g,b);
     stroke(r, g, b);
     ellipse(x,y,radius*2,radius*2);
+    fill(255,255,255);
+    stroke(255, 255, 255);
+    ellipse(x+xvel,y+yvel,radius*1.7,radius*1.7);
+    fill(r,g,b);
+    stroke(r, g, b);
+    ellipse(x+xvel,y+yvel,radius*1.4,radius*1.4);
   }
 
   void move() {
