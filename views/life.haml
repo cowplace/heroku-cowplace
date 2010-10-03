@@ -1,0 +1,15 @@
+- content_for :header do
+  = stylesheet_link_tag 'life'
+  = javascript_include_tag 'life'
+- content_for :title do
+  %title= title_with_name('life game')
+- content_for :leftbar do
+  %p please see life game
+
+%table
+  %tbody
+    - 60.times do |i|
+      %tr
+        - 150.times do |j|
+          %td{:id => "#{i}-#{j}", :class => 'none'}
+

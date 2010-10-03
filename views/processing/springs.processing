@@ -1,8 +1,8 @@
 class SpringBall extends Ball {
   SpringBall() {
     super();
-    xvel = 0;
-    yvel = 0;
+    vx = 0;
+    vy = 0;
   }
 
   void spring(SpringBall ball1){
@@ -16,10 +16,10 @@ class SpringBall extends Ball {
       line(x,y,ball1.x,ball1.y);
       float ax = dx * springArgument;
       float ay = dy * springArgument;
-      xvel += ax;
-      yvel += ay;
-      ball1.xvel -= ax;
-      ball1.yvel -= ay;
+      vx += ax;
+      vy += ay;
+      ball1.vx -= ax;
+      ball1.vy -= ay;
     }
   }
 }

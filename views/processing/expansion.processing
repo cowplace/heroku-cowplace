@@ -3,8 +3,8 @@ class ExpandBall extends Ball {
 
   ExpandBall (){
     super();
-    xvel = 0;
-    yvel = 0;
+    vx = 0;
+    vy = 0;
     radius = 1;
     vradius = 1;
     reposition();
@@ -80,7 +80,7 @@ void draw() {
     balls.get(i).show();
   }
 
-  if(numBalls > 500){
+  if(numBalls > 800){
     noloop();
   }
 }

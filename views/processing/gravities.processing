@@ -1,8 +1,8 @@
 class GravityBall extends Ball {
   GravityBall() {
     super();
-    xvel = 0;
-    yvel = 0;
+    vx = 0;
+    vy = 0;
   }
 
   void gravitate(GravityBall ball1){
@@ -17,10 +17,10 @@ class GravityBall extends Ball {
       float force = mass * ball1.mass / distSQ;
       float ax = force * dx / dist;
       float ay = force * dy / dist;
-      xvel += ax / mass;
-      yvel += ay / mass;
-      ball1.xvel -= ax / ball1.mass;
-      ball1.yvel -= ay / ball1.mass;
+      vx += ax / mass;
+      vy += ay / mass;
+      ball1.vx -= ax / ball1.mass;
+      ball1.vy -= ay / ball1.mass;
     }
   }
 }

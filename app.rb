@@ -71,6 +71,11 @@ get '/visualized_structure' do
   haml :structure
 end
 
+get '/life' do
+  @navi = breadcrumb_list(:life)
+  haml :life
+end
+
 get '/top' do
   redirect '/'
 end
