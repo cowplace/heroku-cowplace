@@ -1,0 +1,49 @@
+class Particle extends Ball {
+  Particle() {
+    super();
+    //radius = 1;
+    vy = random(3);
+  }
+
+  void print(){
+    fill(255,255,255, 100);
+    stroke(255,255,255);
+    ellipse(x,y,radius*2,radius*2);
+  }
+
+  void fall(){
+    x += random(2)-1;
+    y -= vy+random(2);
+    if(y < -radius){
+      y = height+radius;
+      vy = random(3);
+      x = random(width);
+    }
+    if(x+radius < 0){
+      x = width+radius;
+    } else if(x-radius > width){
+      x = -radius;
+    }
+  }
+}
+
+ArrayList particles = new ArrayList();
+
+void setup() {
+  size(800, 400);
+  for(int i = 0; i< 150; i++){
+    particles.add(new Particle());
+  }
+}
+
+void draw() {
+  background(0);
+  int numParticles = particles.length;
+  Particle particle0;
+
+  for(int i=0; i<numParticles; i++){
+    particle0 = particles.get(i);
+    particle0.fall();
+    particle0.print();
+  }
+}
