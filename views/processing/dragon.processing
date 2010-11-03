@@ -90,7 +90,6 @@ Lines lines;
 
 void setup() {
   size(800, 400);
-  frameRate(30);
   line_no = 0;
   stage_no = 2;
   lines = new Lines(new Dragons(stage_no));
@@ -98,8 +97,8 @@ void setup() {
 }
 
 void draw() {
-  background(255);
   if(line_no > lines.length){
+    background(255);
     lines.generate(new Dragons(++stage_no));
     line_no = 0;
   }

@@ -61,10 +61,8 @@ class Lines {
 
   void draw(int cnt){
     if (cnt >= length){
-      cnt = length;
+      cnt = length-1;
     }
-    for (int i=0;i<cnt;i++){
-      entries.get(i).draw();
-    }
+    entries.get(cnt).draw();
   }
 }
