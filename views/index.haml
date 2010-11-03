@@ -3,15 +3,6 @@
 - content_for :leftbar do
   %p please select topics
   %ul
-    %li
-      %a{:href => :author} author
-    %li
-      %a{:href => :visualized_sorting_algorithm} sorting
-    %li
-      %a{:href => :multi_particles} particles
-    %li
-      %a{:href => :visualized_list} list
-    %li
-      %a{:href => :visualized_structure} structure
-    %li
-      %a{:href => :life} life
+    - @kinds.each do |pair|
+      %li
+        %a{:href => pair.first}= pair.last

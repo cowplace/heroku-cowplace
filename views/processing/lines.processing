@@ -1,0 +1,70 @@
+class Point {
+  float x,y;
+  Point (float px, float py){
+    x = px;
+    y = py;
+  }
+}
+
+class Points {
+  ArrayList entries;
+  Points (int num){
+    generate(num);
+  }
+
+  void generate(int num){
+    entries = new ArrayList();
+    for(int i=0;i<num;i++){
+      add_entry(random(width), random(height));
+    }
+  }
+
+  void add_entry(float x, float y){
+    entries.add(new Point(x, y));
+  }
+}
+
+class Line {
+  float x1, y1, x2, y2;
+  Line (float px1, float py1, float px2, float py2){
+    x1=px1;
+    y1=py1;
+    x2=px2;
+    y2=py2;
+  }
+
+  void draw(){
+    stroke(0, 0, 0);
+    line(x1,y1,x2,y2);
+  }
+}
+
+class Lines {
+  ArrayList entries;
+  int length;
+  Lines (Points ps){
+    generate(ps);
+  }
+
+  void generate(Points ps){
+    entries = new ArrayList();
+    length = ps.entries.size();
+    Point present = ps.entries.get(0);
+    Point next;
+    for(int i=1; i<length; i++){
+      next = ps.entries.get(i);
+      entries.add(new Line(present.x, present.y, next.x, next.y));
+      present = next;
+    }
+    length -= 1;
+  }
+
+  void draw(int cnt){
+    if (cnt >= length){
+      cnt = length;
+    }
+    for (int i=0;i<cnt;i++){
+      entries.get(i).draw();
+    }
+  }
+}

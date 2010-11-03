@@ -1,5 +1,6 @@
 class Ball {
-  float x, y, vx, vy, r, g, b, radius, mass;
+  float x, y, vx, vy, mass;
+  int r, g, b, radius;
 
   Ball () {
     x = random(width);
@@ -92,5 +93,3 @@ class Point {
     y = py;
   }
 }
-
-

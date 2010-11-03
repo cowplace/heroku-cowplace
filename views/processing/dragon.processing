@@ -1,0 +1,65 @@
+class Dragons extends Points {
+  Dragons(int stage){
+    generate(stage);
+  }
+
+  void generate(int stage){
+    entries = new ArrayList();
+    boolean is_right = new boolean[1 << stage];
+    add_entry(200, 140);
+    int p = 0;
+    float dx = 0;
+    float dy = 2;
+    float D = 3;
+    add_entry_relative(D * dx, D * dy);
+    float dx1, dy1;
+    for(int k=1;k<=stage;k++){
+      is_right[p] = false;
+      for(int i=0;i<=p;i++){
+        if(is_right[p-i]){
+          is_right[p+i] = false;
+          dx1 = -dy;
+          dy1 = dx;
+        } else {
+          is_right[p+i] = true;
+          dx1 = dy;
+          dy1 = -dx;
+        }
+        add_entry_relative(dx+dx1, dy+dy1);
+        add_entry_relative(D*dx1, D*dy1);
+        dx=dx1;
+        dy=dy1;
+      }
+      p = p*2+1;
+    }
+  }
+
+  void add_entry_relative(float dx, float dy){
+    Point last = entries.get(entries.size()-1);
+    add_entry(last.x+dx, last.y+dy);
+  }
+}
+
+
+int line_no;
+int stage_no;
+Lines lines;
+
+void setup() {
+  size(800, 400);
+  frameRate(30);
+  line_no = 0;
+  stage_no = 1;
+  lines = new Lines(new Dragons(stage_no));
+  background(255);
+}
+
+void draw() {
+  background(255);
+  if(line_no > lines.length){
+    lines.generate(new Dragons(++stage_no));
+    line_no = 0;
+  }
+  lines.draw(line_no);
+  line_no++;
+}

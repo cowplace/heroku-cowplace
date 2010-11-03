@@ -6,7 +6,6 @@ void setup() {
         balls[i] = new Ball();
     }
 }
- 
 void draw() {
     background(255);
     int numBalls = balls.length;
@@ -22,7 +21,6 @@ void draw() {
             ball0.checkCollisionWithBall(balls[j]);
         }
     }
-
     for (int i = 0; i < numBalls; i++){
         balls[i].show();
     }

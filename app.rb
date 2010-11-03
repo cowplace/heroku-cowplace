@@ -10,6 +10,15 @@ Sinatra::Base.register SinatraMore::RenderPlugin
 require 'graphviz'
 
 get '/' do
+  @kinds = [
+    [:author, 'author'],
+    [:visualized_sorting_algorithm, 'sorting'],
+    [:multi_particles, 'particles'],
+    [:visualized_list, 'list'],
+    [:visualized_structure, 'structure'],
+    [:life, 'life'],
+    [:graphics, 'graphics'],
+  ]
   @navi = breadcrumb_list
   haml :index
 end
@@ -53,7 +62,7 @@ get '/multi_particles/:kind' do |kind|
   if @kinds.include?(kind) then
     @kind = kind
     @navi = breadcrumb_list([:multi_particles, @kind])
-    haml :processing
+    haml :multi_particles
   else
     redirect '/multi_particles'
   end
@@ -74,6 +83,23 @@ end
 get '/life' do
   @navi = breadcrumb_list(:life)
   haml :life
+end
+
+get '/graphics' do
+  @kinds = %w(dragon)
+  @navi = breadcrumb_list(:graphics)
+  haml :graphics
+end
+
+get '/graphics/:kind' do |kind|
+  @kinds = %w(dragon)
+  if @kinds.include?(kind) then
+    @kind = kind
+    @navi = breadcrumb_list([:graphics, @kind])
+    haml :graphics
+  else
+    redirect '/graphics'
+  end
 end
 
 get '/top' do
