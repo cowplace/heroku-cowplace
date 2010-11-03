@@ -4,9 +4,52 @@ class Dragons extends Points {
   }
 
   void generate(int stage){
+    create(stage);
+    Point tmp = entries;
+    entries = new ArrayList();
+    int length = tmp.size();
+    float max_x=0;
+    float min_x=width;
+    float max_y=0;
+    float min_y=height;
+    Point p;
+    for(int i=0;i<length;i++){
+      p = tmp.get(i);
+      if(p.x > max_x){
+        max_x = p.x;
+      }
+      if(p.x < min_x){
+        min_x = p.x;
+      }
+      if(p.y > max_y){
+        max_y = p.y;
+      }
+      if(p.y < min_y){
+        min_y = p.y;
+      }
+    }
+    float dx = max_x - min_x;
+    float dy = max_y - min_y;
+    for(int i=0;i<length;i++){
+      p = tmp.get(i);
+      if (dx > dy){
+        add_entry(
+          (p.x - min_x) * width / dx,
+          (p.y - min_y) * height / dy
+        );
+      } else {
+        add_entry(
+          (p.y - min_y) * width / dy,
+          (p.x - min_x) * height / dx
+        );
+      }
+    }
+  }
+
+  void create(int stage){
     entries = new ArrayList();
     boolean is_right = new boolean[1 << stage];
-    add_entry(200, 140);
+    add_entry(0, 0);
     int p = 0;
     float dx = 0;
     float dy = 2;
@@ -49,7 +92,7 @@ void setup() {
   size(800, 400);
   frameRate(30);
   line_no = 0;
-  stage_no = 1;
+  stage_no = 2;
   lines = new Lines(new Dragons(stage_no));
   background(255);
 }
