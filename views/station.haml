@@ -1,0 +1,18 @@
+- content_for :header do
+  = javascript_include_tag 'processing'
+  = javascript_include_tag 'excanvas'
+  = javascript_include_tag 'processing_init'
+  %script{:id => @kind, :type => 'application/processing'}
+    void setup(){ |
+      size(800,400); |
+      background(255); |
+      fill(0); |
+    - @kinds.each do |station|
+      = "point(#{station.lon}, #{station.lat});"
+    }
+  %script{:type => 'text/javascript'}
+    = "window.onload = function(){init('#{@kind}');};"
+- content_for :title do
+  %title= title_with_name('station')
+
+%div{:id => 'stage'}

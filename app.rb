@@ -7,6 +7,8 @@ require 'sinatra_more/render_plugin'
 Sinatra::Base.register SinatraMore::MarkupPlugin
 Sinatra::Base.register SinatraMore::RenderPlugin
 
+require 'fastercsv'
+
 require 'graphviz'
 
 get '/' do
@@ -102,6 +104,13 @@ get '/graphics/:kind' do |kind|
   end
 end
 
+get '/station' do
+  @kind = 'yamanote'
+  @kinds = get_stations
+  @navi = breadcrumb_list(:station)
+  haml :station
+end
+
 get '/top' do
   redirect '/'
 end
@@ -184,5 +193,34 @@ helpers do
     g.add_edge(execute, compare )
 
     return g.output(:none => String).gsub("\n", ';').gsub(';;', ';').gsub('{;', '{').gsub(' ', '').gsub('digraphG', 'digraph')
+  end
+
+  def get_stations
+    stations = []
+    FasterCSV.foreach('m_station.utf8.csv') do |row|
+      stations << Station.new(row)
+    end
+
+    lat_min = stations.map{|s| s.lat}.min
+    lat_max = stations.map{|s| s.lat}.max
+    lon_min = stations.map{|s| s.lon}.min
+    lon_max = stations.map{|s| s.lon}.max
+
+    stations.each{|s| s.mod_pos(lat_min, lat_max, lon_min, lon_max)}
+    return stations
+  end
+end
+
+class Station
+  attr_accessor :lat, :lon, :name
+  def initialize(row)
+    @lat  = row[-2].to_f
+    @lon  = row[-3].to_f
+    @name = row[-5]
+  end
+
+  def mod_pos(lat_min, lat_max, lon_min, lon_max)
+    @lat = (lat_max-@lat) / (lat_max-lat_min) * 380 + 10
+    @lon = (@lon-lon_min) / (lon_max-lon_min) * 380 + 10
   end
 end
