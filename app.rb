@@ -7,6 +7,8 @@ require 'sinatra_more/render_plugin'
 Sinatra::Base.register SinatraMore::MarkupPlugin
 Sinatra::Base.register SinatraMore::RenderPlugin
 
+require 'fastercsv'
+
 get '/' do
   @kinds = [
     [:author, 'author'],
@@ -162,7 +164,7 @@ helpers do
 
   def get_stations
     stations = []
-    CSV.open('m_station.utf8.csv', 'r') do |row|
+    FasterCSV.foreach('m_station.utf8.csv') do |row|
       stations << Station.new(row)
     end
 
