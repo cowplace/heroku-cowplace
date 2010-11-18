@@ -1,2 +1,3 @@
 sinatra_more --version 0.3.40
 ruby-graphviz --version 0.9.15
+fastercsv --version 1.5.3
