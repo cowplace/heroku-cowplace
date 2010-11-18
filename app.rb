@@ -9,8 +9,6 @@ Sinatra::Base.register SinatraMore::RenderPlugin
 
 require 'fastercsv'
 
-require 'graphviz'
-
 get '/' do
   @kinds = [
     [:author, 'author'],
@@ -74,12 +72,6 @@ get '/visualized_list' do
   @kinds = list_sample
   @navi = breadcrumb_list(:visualized_list)
   haml :list
-end
-
-get '/visualized_structure' do
-  @kinds = graphviz_sample
-  @navi = breadcrumb_list(:visualized_structure)
-  haml :structure
 end
 
 get '/life' do
@@ -168,31 +160,6 @@ helpers do
       end
     end
     return [0]
-  end
-
-  def graphviz_sample
-    g = GraphViz.new('G')
-
-    main        = g.add_node( "main" )
-    parse       = g.add_node( "parse" )
-    execute     = g.add_node( "execute" )
-    init        = g.add_node( "init" )
-    cleanup     = g.add_node( "cleanup" )
-    make_string = g.add_node( "make_string" )
-    printf      = g.add_node( "printf" )
-    compare     = g.add_node( "compare" )
-
-    g.add_edge(main, parse )
-    g.add_edge(parse, execute )
-    g.add_edge(main, init )
-    g.add_edge(main, cleanup )
-    g.add_edge(execute, make_string )
-    g.add_edge(execute, printf )
-    g.add_edge(init, make_string )
-    g.add_edge(main, printf )
-    g.add_edge(execute, compare )
-
-    return g.output(:none => String).gsub("\n", ';').gsub(';;', ';').gsub('{;', '{').gsub(' ', '').gsub('digraphG', 'digraph')
   end
 
   def get_stations
