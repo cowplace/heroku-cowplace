@@ -15,9 +15,9 @@ get '/' do
     [:visualized_sorting_algorithm, 'sorting'],
     [:multi_particles, 'particles'],
     [:visualized_list, 'list'],
-    [:visualized_structure, 'structure'],
     [:life, 'life'],
     [:graphics, 'graphics'],
+    [:station, 'station'],
   ]
   @navi = breadcrumb_list
   haml :index
@@ -187,7 +187,15 @@ class Station
   end
 
   def mod_pos(lat_min, lat_max, lon_min, lon_max)
-    @lat = (lat_max-@lat) / (lat_max-lat_min) * 380 + 10
-    @lon = (@lon-lon_min) / (lon_max-lon_min) * 380 + 10
+    delta = 800
+    d_lat = lat_max - lat_min
+    d_lon = lon_max - lon_min
+    if d_lat > d_lon then
+      delta = d_lat
+    else
+      delta = d_lon
+    end
+    @lat = (lat_max-@lat) / delta * 780 + 10
+    @lon = (@lon-lon_min) / delta * 780 + 10
   end
 end
