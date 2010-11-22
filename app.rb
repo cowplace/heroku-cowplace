@@ -8,6 +8,7 @@ Sinatra::Base.register SinatraMore::MarkupPlugin
 Sinatra::Base.register SinatraMore::RenderPlugin
 
 require 'fastercsv'
+require 'lib/station.rb'
 
 get '/' do
   @kinds = [
@@ -69,7 +70,7 @@ get '/multi_particles/:kind' do |kind|
 end
 
 get '/visualized_list' do
-  @kinds = list_sample
+  @kinds = get_list
   @navi = breadcrumb_list(:visualized_list)
   haml :list
 end
@@ -97,10 +98,23 @@ get '/graphics/:kind' do |kind|
 end
 
 get '/station' do
-  @kind = 'yamanote'
-  @kinds = get_stations
+  @kind = 'station'
+  @kinds = Prefectures.get_list
+  @stations = Station.get_stations
   @navi = breadcrumb_list(:station)
   haml :station
+end
+
+get '/station/:prefecture' do |prefecture|
+  @kind = 'station'
+  @kinds = Prefectures.get_list
+  if @kinds.include?(prefecture) then
+    @stations = Station.get_stations(Prefectures.get_no(prefecture))
+    @navi = breadcrumb_list([:station, prefecture])
+    haml :station
+  else
+    redirect '/station'
+  end
 end
 
 get '/top' do
@@ -150,52 +164,15 @@ helpers do
     end
   end
 
-  def list_sample(depth=3)
+  def get_list(depth=3)
     if depth > 0 then
       rnd = rand
       if rnd < 0.5 then
-        return [list_sample(depth-1), list_sample(depth-1)]
+        return [get_list(depth-1), get_list(depth-1)]
       elsif rnd < 0.99 then
-        return list_sample(depth-1) + list_sample(depth-1)
+        return get_list(depth-1) + get_list(depth-1)
       end
     end
     return [0]
-  end
-
-  def get_stations
-    stations = []
-    FasterCSV.foreach('m_station.utf8.csv') do |row|
-      stations << Station.new(row)
-    end
-
-    lat_min = stations.map{|s| s.lat}.min
-    lat_max = stations.map{|s| s.lat}.max
-    lon_min = stations.map{|s| s.lon}.min
-    lon_max = stations.map{|s| s.lon}.max
-
-    stations.each{|s| s.mod_pos(lat_min, lat_max, lon_min, lon_max)}
-    return stations
-  end
-end
-
-class Station
-  attr_accessor :lat, :lon, :name
-  def initialize(row)
-    @lat  = row[-2].to_f
-    @lon  = row[-3].to_f
-    @name = row[-5]
-  end
-
-  def mod_pos(lat_min, lat_max, lon_min, lon_max)
-    delta = 800
-    d_lat = lat_max - lat_min
-    d_lon = lon_max - lon_min
-    if d_lat > d_lon then
-      delta = d_lat
-    else
-      delta = d_lon
-    end
-    @lat = (lat_max-@lat) / delta * 780 + 10
-    @lon = (@lon-lon_min) / delta * 780 + 10
   end
 end
