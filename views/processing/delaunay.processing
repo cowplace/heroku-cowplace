@@ -1,0 +1,146 @@
+class Vertex extends Ball {
+  Vertex(float px, float py){
+    super();
+    x = px;
+    y = py;
+    r = 0;
+    g = 0;
+    b = 0;
+    radius = 1;
+  }
+
+  boolean isSame(Vertex other){
+    return (x == other.x) && (y == other.y);
+  }
+}
+
+class Edge {
+  Vertex v0, v1;
+  Edge(Vertex pv0, Vertex pv1){
+    v0 = pv0;
+    v1 = pv1;
+  }
+
+  boolean isSame(Edge other){
+    return (v0.isSame(other.v0) && v1.isSame(other.v1)) || (v0.isSame(other.v1) && v1.isSame(other.v0));
+  }
+}
+
+class Triangle {
+  Vertex v0, v1, v2;
+  Triangle(Vertex pv0, Vertex pv1, Vertex pv2){
+    v0 = pv0;
+    v1 = pv1;
+    v2 = pv2;
+  }
+
+  boolean isOuterCircle(Vertex node){
+    float x = node.x;
+    float y = node.y;
+    float dx0 = v0.x-x;
+    float dx1 = v1.x-x;
+    float dx2 = v2.x-x;
+    float dy0 = v0.y-y;
+    float dy1 = v1.y-y;
+    float dy2 = v2.y-y;
+    float d = (sq(v0.x)+sq(v0.y)-sq(x)-sq(y)) * (dx1*dy2-dx2*dy1) + (sq(v1.x)+sq(v1.y)-sq(x)-sq(y)) * (dx2*dy0-dy2*dx0) + (sq(v2.x)+sq(v2.y)-sq(x)-sq(y)) * (dx0*dy1-dy0*dx1);
+    return ((v1.x-v0.x)*(v2.y-v0.y)-(v1.y-v0.y)*(v2.x-v0.x) > 0 ) ? d > 0 : d <= 0;
+  }
+
+  void show(){
+    stroke(0, 0, 0);
+    triangle(v0.x,v0.y,v1.x,v1.y,v2.x,v2.y);
+  }
+}
+
+class Delaunay {
+  ArrayList points;
+  ArrayList triangles;
+
+  Delaunay(){
+    points = new ArrayList();
+    for(int i = 0; i < 30; i++){
+      points.add(new Vertex(random(width), random(height)));
+    }
+    triangles = new ArrayList();
+    triangles.add(new Triangle(new Vertex(0,0), new Vertex(width,0), new Vertex(width,height)));
+    triangles.add(new Triangle(new Vertex(0,0), new Vertex(width,height), new Vertex(0,height)));
+  }
+
+  void update(){
+    ArrayList localTringles = new ArrayList();
+    ArrayList edges = new ArrayList();
+    ArrayList polygon = new ArrayList();
+    int numPoints = points.size();
+    Vertex node;
+    Triangle tri;
+    for(int k=0;k<numPoints;k++){
+      localTringles = new ArrayList();
+      edges = new ArrayList();
+      node = (Vertex)points.get(k);
+      int numTriangles = triangles.size();
+      for(int i=0;i<numTriangles;i++){
+        tri = (Triangle)triangles.get(i);
+        if(tri.isOuterCircle(node)){
+          edges.add(new Edge(tri.v0, tri.v1));
+          edges.add(new Edge(tri.v1, tri.v2));
+          edges.add(new Edge(tri.v2, tri.v0));
+        }else{
+          localTringles.add(tri);
+        }
+      }
+      polygon = new ArrayList();
+      int numEdges = edges.size();
+      Edge edge0;
+      Edge edge1;
+      for(int i=0;i<numEdges;i++){
+        edge0 = (Edge)edges.get(i);
+        boolean flg = false;
+        for(int j=polygon.size()-1;j>=0;j--){
+          edge1 = (Edge)polygon.get(j);
+          if(edge0.isSame(edge1)){
+            flg = true;
+            polygon.remove(j);
+            break;
+          }
+        }
+        if(!flg){
+          polygon.add(edge0);
+        }
+      }
+      int numPolygons = polygon.size();
+      Edge edget;
+      for(int i=0;i<numPolygons;i++){
+        edget = (Edge)polygon.get(i);
+        localTringles.add(new Triangle(edget.v0, edget.v1, node));
+      }
+      if(localTringles.size() > 0){
+        triangles = localTringles;
+      }
+    }
+  }
+
+  void show(){
+    int numTriangles = triangles.size();
+    for(int i=0;i<numTriangles;i++){
+      triangles.get(i).show();
+    }
+    int numPoints = points.size();
+    for(int i=0;i<numPoints;i++){
+      points.get(i).show();
+      points.get(i).move();
+    }
+  }
+}
+
+Delaunay delaunay;
+void setup() {
+    size(800, 400);
+    delaunay = new Delaunay();
+}
+
+void draw() {
+    background(255);
+    delaunay.update();
+    delaunay.show();
+}

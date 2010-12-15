@@ -53,13 +53,13 @@ get '/visualized_sorting_algorithm' do
 end
 
 get '/multi_particles' do
-  @kinds = %w(collisions springs gravities expansion bubble)
+  @kinds = %w(collisions springs gravities expansion bubble delaunay)
   @navi = breadcrumb_list(:multi_particles)
   haml :multi_particles
 end
 
 get '/multi_particles/:kind' do |kind|
-  @kinds = %w(collisions springs gravities expansion bubble)
+  @kinds = %w(collisions springs gravities expansion bubble delaunay)
   if @kinds.include?(kind) then
     @kind = kind
     @navi = breadcrumb_list([:multi_particles, @kind])
