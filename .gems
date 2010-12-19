@@ -1,4 +1,5 @@
 rack --version 1.1.0
 fastercsv --version 1.5.3
 zipruby --version 0.3.6
+thor --version 0.13.6
 sinatra_more --version 0.3.40
