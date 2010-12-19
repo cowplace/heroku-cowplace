@@ -1,3 +1,5 @@
+require 'lib/open-zip'
+
 class Station
   attr_accessor :lat, :lon, :name
   def initialize(row)
@@ -27,7 +29,7 @@ class Station
   class << self
     def get_stations(pref_code=:all)
       stations = []
-      FasterCSV.foreach('m_station.utf8.csv') do |row|
+      FasterCSV.parse(open('station.zip/m_station.utf8.csv').read, :headers => true) do |row|
         station = Station.new(row)
         stations << station if station.target_pref?(pref_code)
       end

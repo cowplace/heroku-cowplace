@@ -1,16 +1,24 @@
 class Vertex extends Ball {
+  int c;
   Vertex(float px, float py){
     super();
     x = px;
     y = py;
+    vx /= 2;
+    vy /= 2;
     r = 0;
     g = 0;
     b = 0;
     radius = 1;
+    c = random(255);
   }
 
   boolean isSame(Vertex other){
     return (x == other.x) && (y == other.y);
+  }
+
+  boolean isNotLimits(){
+    return ((x != 0) && (x != width)) || ((y != 0) && (y != height));
   }
 }
 
@@ -48,19 +56,23 @@ class Triangle {
   }
 
   void show(){
-    stroke(0, 0, 0);
-    triangle(v0.x,v0.y,v1.x,v1.y,v2.x,v2.y);
+    if(v0.isNotLimits() && v1.isNotLimits() && v2.isNotLimits()){
+      stroke(0, 0, 0);
+      //fill(v0.c, v1.c, v2.c);
+      triangle(v0.x,v0.y,v1.x,v1.y,v2.x,v2.y);
+    }
   }
 }
 
 class Delaunay {
-  ArrayList points;
+  Vertex points;
   ArrayList triangles;
 
   Delaunay(){
-    points = new ArrayList();
-    for(int i = 0; i < 15; i++){
-      points.add(new Vertex(random(width), random(height)));
+    points = new Vertex[15];
+    int numPoints = points.length;
+    for(int i = 0; i < numPoints; i++){
+      points[i] = new Vertex(random(width), random(height));
     }
     triangles = new ArrayList();
     triangles.add(new Triangle(new Vertex(0,0), new Vertex(width,0), new Vertex(width,height)));
@@ -71,13 +83,13 @@ class Delaunay {
     ArrayList localTringles = new ArrayList();
     ArrayList edges = new ArrayList();
     ArrayList polygon = new ArrayList();
-    int numPoints = points.size();
+    int numPoints = points.length;
     Vertex node;
     Triangle tri;
     for(int k=0;k<numPoints;k++){
       localTringles = new ArrayList();
       edges = new ArrayList();
-      node = (Vertex)points.get(k);
+      node = points[k];
       int numTriangles = triangles.size();
       for(int i=0;i<numTriangles;i++){
         tri = (Triangle)triangles.get(i);
@@ -125,10 +137,10 @@ class Delaunay {
     for(int i=0;i<numTriangles;i++){
       triangles.get(i).show();
     }
-    int numPoints = points.size();
+    int numPoints = points.length;
     for(int i=0;i<numPoints;i++){
-      points.get(i).show();
-      points.get(i).move();
+      points[i].show();
+      points[i].move();
     }
   }
 }
@@ -136,11 +148,12 @@ class Delaunay {
 Delaunay delaunay;
 void setup() {
     size(800, 400);
+    frameRate(30);
     delaunay = new Delaunay();
 }
 
 void draw() {
     background(255);
-    delaunay.update();
     delaunay.show();
+    delaunay.update();
 }
