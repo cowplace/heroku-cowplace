@@ -9,10 +9,6 @@
       fill(0); |
     - @stations.each do |station|
       = "point(#{station.lon}, #{station.lat});"
-    - @stations.each do |from|
-      - @station.each do |to|
-        - if from.adjs.include?(to.id)
-          = "line(#{from.lon}, #{from.lat}, #{to.lon}, #{to.lat})"
     }
   %script{:type => 'text/javascript'}
     = "window.onload = function(){init('#{@kind}');};"
