@@ -9,6 +9,7 @@ Sinatra::Base.register SinatraMore::RenderPlugin
 
 require 'fastercsv'
 require 'lib/station.rb'
+require 'lib/item.rb'
 
 get '/' do
   @kinds = [
@@ -19,6 +20,7 @@ get '/' do
     [:life, 'life'],
     [:graphics, 'graphics'],
     [:station, 'station'],
+    [:lattice, 'lattice'],
   ]
   @navi = breadcrumb_list
   haml :index
@@ -110,11 +112,18 @@ get '/station/:prefecture' do |prefecture|
   @kinds = Prefectures.get_list
   if @kinds.include?(prefecture) then
     @stations = Station.get_stations(Prefectures.get_no(prefecture))
+    Station.set_line(@stations)
     @navi = breadcrumb_list([:station, prefecture])
     haml :station
   else
     redirect '/station'
   end
+end
+
+get '/lattice' do
+  @navi = breadcrumb_list(:lattice)
+  @items = Item.get_items
+  haml :lattice
 end
 
 get '/top' do
