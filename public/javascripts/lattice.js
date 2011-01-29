@@ -4,7 +4,7 @@ var Environment = Class.create({
     this.show();
   },
   reset_array: function(){
-    this.width = 8;
+    this.width = 7;
     this.height = 4;
     this.len = this.width*this.height;
     this.cells = this.set_random();
@@ -79,7 +79,7 @@ var Environment = Class.create({
       $(y+'-'+x).className = cell;
       if(cell=='alive'){
         $(y+'-'+x).innerHTML = '';
-      } else {
+      } else if($(y+'-'+x).innerHTML == ''){
         no = (Math.random()*len).floor();
         $(y+'-'+x).innerHTML = $('item' + no).innerHTML;
       }
