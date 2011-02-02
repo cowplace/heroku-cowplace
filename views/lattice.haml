@@ -10,9 +10,11 @@
   %tbody
     - 4.times do |i|
       %tr
-        - 7.times do |j|
+        - 6.times do |j|
           %td{:id => "#{i}-#{j}", :class => 'none'}
 %div{:id => 'items'}
   - @items.each_with_index do |item, idx|
     %div{:id => "item#{idx}", :class => 'item'}
-      %a{:href => item.url, :alt => item.name}= image_tag(item.img)
+      %a{:href => item.url, :alt => item.name, :onmouseover => "popup('popup#{idx}', event)", :onmouseout => "popdown('popup#{idx}')" }= image_tag(item.img)
+      %div{:id => "popup#{idx}", :class => 'bubble'}
+        %p{:class => 'description'}= item.name

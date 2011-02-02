@@ -4,7 +4,7 @@ var Environment = Class.create({
     this.show();
   },
   reset_array: function(){
-    this.width = 7;
+    this.width = 6;
     this.height = 4;
     this.len = this.width*this.height;
     this.cells = this.set_random();
@@ -89,6 +89,17 @@ var Environment = Class.create({
 
 document.observe('dom:loaded', function(){
   $('items').hide();
+  $$('.bubble').invoke('hide');
   e = new Environment();
   setInterval('e.update()',3000);
 });
+
+var popup = function(elem,evt){
+  var element = $(elem);
+  element.show();
+  element.setStyle({left: evt.pointerX()+'px', top: evt.pointerY()+'px'});
+};
+
+var popdown = function(elem){
+  $(elem).hide();
+};
