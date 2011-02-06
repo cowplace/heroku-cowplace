@@ -13,7 +13,7 @@ class Item
     def get_items
       items = []
       (1..4).each do |idx|
-        xml = REXML::Document.new(open("http://api.rakuten.co.jp/rws/3.0/rest?developerId=c9e2d430e9844443674e9cc80c63845a&affiliateId=0d65000a.224c5bad.0d65000b.0995e2dd&operation=BooksBookSearch&version=2011-01-27&publisherName=%e3%82%aa%e3%83%a9%e3%82%a4%e3%83%aa%e3%83%bc&page=#{idx}&sort=sales").read)
+        xml = REXML::Document.new(open("http://api.rakuten.co.jp/rws/3.0/rest?developerId=c9e2d430e9844443674e9cc80c63845a&affiliateId=0d65000a.224c5bad.0d65000b.0995e2dd&operation=BooksBookSearch&version=2011-01-27&publisherName=%e3%82%aa%e3%83%a9%e3%82%a4%e3%83%aa%e3%83%bc&page=#{idx}&sort=-releaseDate").read)
         xml.elements.each('//Items/Item') do |item|
           items << Item.new(item)
         end
