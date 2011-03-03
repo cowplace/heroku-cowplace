@@ -1,12 +1,14 @@
 require 'lib/open-zip'
 
 class Station
-  attr_accessor :lat, :lon, :name
+  attr_accessor :id, :lat, :lon, :name, :adjs
   def initialize(row)
+    @id =  row[2].to_i
     @lat  = row[-2].to_f
     @lon  = row[-3].to_f
     @pref_code = row[-4].to_i
     @name = row[-5]
+    @adjs = []
   end
 
   def mod_pos(lat_min, lat_max, lon_min, lon_max)
@@ -20,6 +22,11 @@ class Station
     end
     @lat = (lat_max-@lat) / delta * 780 + 10
     @lon = (@lon-lon_min) / delta * 780 + 10
+  end
+
+  def add_adj(row)
+    @adjs << row[2].to_i if row[1].to_i == @id
+    @adjs << row[1].to_i if row[2].to_i == @id
   end
 
   def target_pref?(pref_code)
@@ -41,6 +48,14 @@ class Station
 
       stations.each{|s| s.mod_pos(lat_min, lat_max, lon_min, lon_max)}
       return stations
+    end
+
+    def set_line(stations)
+      FasterCSV.parse(open('station_join.utf8.csv').read, :headers => true) do |row|
+        stations.each do |station|
+          station.add_adj(row)
+        end
+      end
     end
   end
 end

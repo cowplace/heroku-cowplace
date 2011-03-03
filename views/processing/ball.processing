@@ -8,7 +8,7 @@ class Ball {
     r = random(255);
     g = random(255);
     b = random(255);
-    radius = random(30) + 7;
+    radius = random(20) + 5;
     mass = sq(radius)/1000;
     vx = random(10) - 5;
     vy = random(10) - 5;
@@ -18,17 +18,13 @@ class Ball {
     fill(r,g,b);
     stroke(r, g, b);
     ellipse(x,y,radius*2,radius*2);
-    fill(255,255,255);
-    stroke(255, 255, 255);
-    ellipse(x+vx,y+vy,radius*1.7,radius*1.7);
-    fill(r,g,b);
-    stroke(r, g, b);
-    ellipse(x+vx,y+vy,radius*1.4,radius*1.4);
   }
 
   void move() {
     x += vx;
     y += vy;
+    vx *= 0.999;
+    vy *= 0.999;
     checkCollisionWithWall();
   }
 
@@ -39,11 +35,12 @@ class Ball {
     } else if (x + radius > width){
       x = width - radius;
       vx *= -1.0;
-    } else if (y - radius < 0){
+    }
+    if (y - radius < 0){
       y = 0 + radius;
       vy *= -1.0;
     } else if (y + radius > height){
-      y = height -radius;
+      y = height - radius;
       vy *= -1.0;
     }
   }

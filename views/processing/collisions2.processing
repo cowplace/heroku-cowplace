@@ -1,0 +1,95 @@
+Ball[] balls = new Ball[150];
+ArrayList[][] grid = new ArrayList[16][8];
+int xGrid = 16;
+int yGrid = 8;
+
+void setup() {
+  int widthGrid = 50;
+  int width = 800;
+  int height = 400;
+  size(width, height);
+  for (int i = 0; i < balls.length; i++){
+    balls[i] = new Ball();
+    //balls[i].radius = 10;
+  }
+
+  for(int i=0; i<xGrid; i++){
+    for(int j=0; j<yGrid; j++){
+      grid[i][j] = new ArrayList();
+    }
+  }
+}
+
+void draw() {
+  background(255);
+  int numBalls = balls.length;
+  int widthGrid = 50;
+  int xpos = 0;
+  int ypos = 0;
+  Ball ball0;
+
+  for(int i=0; i<xGrid; i++){
+    for(int j=0; j<yGrid; j++){
+      grid[i][j].clear();
+      rect(i*widthGrid,j*widthGrid,widthGrid,widthGrid);
+    }
+  }
+
+  for (int i = 0; i < numBalls; i++){
+    ball0 = balls[i];
+    ball0.move();
+    xpos = floor(ball0.x/widthGrid);
+    ypos = floor(ball0.y/widthGrid);
+    if(grid[xpos][ypos] == null){
+      ball0.show();
+      noLoop();
+    }
+    grid[xpos][ypos].add(ball0);
+  }
+
+  checkGrid();
+  for (int i = 0; i < numBalls; i++){
+    balls[i].show();
+  }
+}
+
+void checkGrid() {
+  for(int i=0;i<xGrid;i++){
+    for(int j=0;j<yGrid;j++){
+      checkSameCell(i,j);
+      checkAdjCell(i,j,i+1,j);
+      checkAdjCell(i,j,i-1,j+1);
+      checkAdjCell(i,j,i,j+1);
+      checkAdjCell(i,j,i+1,j+1);
+    }
+  }
+}
+
+void checkSameCell(int x, int y){
+  ArrayList ball_list = grid[x][y];
+  int numBalls = ball_list.size();
+  Ball ball0;
+  for (int i = 0; i < numBalls; i++){
+    ball0 = ball_list.get(i);
+    for (int j = i+1; j < numBalls; j++){
+      ball0.checkCollisionWithBall(ball_list.get(j));
+    }
+  }
+}
+
+void checkAdjCell(int x1, int y1, int x2, int y2){
+  if(x2<0 || x2>=xGrid || y2>=yGrid ){
+    return;
+  }
+  ArrayList ball_list0 = grid[x1][y1];
+  int numBalls0 = ball_list0.size();
+  ArrayList ball_list1 = grid[x2][y2];
+  int numBalls1 = ball_list1.size();
+  Ball ball0;
+  for(int i=0;i<numBalls0;i++){
+    ball0 = ball_list0.get(i);
+    for(int j=0;j<numBalls1;j++){
+      ball0.checkCollisionWithBall(ball_list1.get(j));
+    }
+  }
+}
