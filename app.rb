@@ -16,6 +16,7 @@ get '/' do
     [:author, 'author'],
     [:visualized_sorting_algorithm, 'sorting'],
     [:multi_particles, 'particles'],
+    [:field, 'field'],
     [:visualized_list, 'list'],
     [:life, 'life'],
     [:graphics, 'graphics'],
@@ -69,6 +70,12 @@ get '/multi_particles/:kind' do |kind|
   else
     redirect '/multi_particles'
   end
+end
+
+get '/field' do
+  @kind = 'field'
+  @navi = breadcrumb_list(:field)
+  haml :field
 end
 
 get '/visualized_list' do

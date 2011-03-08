@@ -2,6 +2,7 @@ Ball[] balls = new Ball[150];
 ArrayList[][] grid = new ArrayList[16][8];
 int xGrid = 16;
 int yGrid = 8;
+ArrayList _checks;
 
 void setup() {
   int widthGrid = 50;
@@ -10,7 +11,7 @@ void setup() {
   size(width, height);
   for (int i = 0; i < balls.length; i++){
     balls[i] = new Ball();
-    //balls[i].radius = 10;
+    balls[i].radius = 5;
   }
 
   for(int i=0; i<xGrid; i++){
@@ -18,9 +19,12 @@ void setup() {
       grid[i][j] = new ArrayList();
     }
   }
+
+  _checks = new ArrayList();
 }
 
 void draw() {
+  _checks.clear();
   background(255);
   int numBalls = balls.length;
   int widthGrid = 50;
@@ -63,6 +67,10 @@ void checkGrid() {
       checkAdjCell(i,j,i+1,j+1);
     }
   }
+  int numChecks = _checks.size();
+  for(int i=0;i<numChecks;i+=2){
+    _checks.get(i).checkCollisionWithBall(_checks.get(i+1));
+  }
 }
 
 void checkSameCell(int x, int y){
@@ -72,7 +80,8 @@ void checkSameCell(int x, int y){
   for (int i = 0; i < numBalls; i++){
     ball0 = ball_list.get(i);
     for (int j = i+1; j < numBalls; j++){
-      ball0.checkCollisionWithBall(ball_list.get(j));
+      _checks.add(ball0);
+      _checks.add(ball_list.get(j));
     }
   }
 }
@@ -89,7 +98,8 @@ void checkAdjCell(int x1, int y1, int x2, int y2){
   for(int i=0;i<numBalls0;i++){
     ball0 = ball_list0.get(i);
     for(int j=0;j<numBalls1;j++){
-      ball0.checkCollisionWithBall(ball_list1.get(j));
+      _checks.add(ball0);
+      _checks.add(ball_list1.get(j));
     }
   }
 }

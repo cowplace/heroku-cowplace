@@ -1,0 +1,42 @@
+class Point {
+  float x,y;
+  Point (float px, float py){
+    x = px;
+    y = py;
+  }
+
+  Point3D screenToIso(){
+    return new Point3D(y+x*0.5, 0, y-x*0.5);
+  }
+}
+
+class Point3D {
+  float x,y,z;
+  final float Y_CORRECT = cos(-PI/6) * sqrt(2);
+  Point3D(float px, float py, float pz){
+    x = px;
+    y = py;
+    z = pz;
+    Y_CORRECT = cos(-PI/6) * sqrt(2);
+  }
+
+  Point isoToScreen(){
+    return new Point(x-z, y*Y_CORRECT+(x+z)*0.5);
+  }
+}
+
+Point3D p0 = new Point3D(0,0,0);
+Point3D p1 = new Point3D(100,0,0);
+Point3D p2 = new Point3D(100,0,100);
+Point3D p3 = new Point3D(0,0,100);
+
+Point sp0 = p0.isoToScreen();
+Point sp1 = p1.isoToScreen();
+Point sp2 = p2.isoToScreen();
+Point sp3 = p3.isoToScreen();
+
+stroke(0, 0, 0);
+line(sp0.x, sp0.y, sp1.x, sp1.y);
+line(sp1.x, sp1.y, sp2.x, sp2.y);
+line(sp2.x, sp2.y, sp3.x, sp3.y);
+line(sp3.x, sp3.y, sp0.x, sp0.y);
