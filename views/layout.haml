@@ -3,7 +3,6 @@
   %head
     %meta{'http-equiv' => 'content',:content => 'text/html; charset=utf-8'}
     %link{:rel => 'shortcut icon', :href => "favicon.ico", :type => "image/x-icon"}
-    = javascript_include_tag 'prototype'
     = stylesheet_link_tag 'common'
     != yield_content :header
     != yield_content :title
@@ -21,3 +20,6 @@
         != yield
     #footer.navi
       %p copyleft (c) 2010 cowplace all rights reversed.
+    #scripts
+      = javascript_include_tag 'prototype'
+      != yield_content :scripts
