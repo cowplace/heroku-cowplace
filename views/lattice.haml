@@ -1,6 +1,7 @@
 - content_for :header do
   = stylesheet_link_tag 'lattice'
 - content_for :scripts do
+  = javascript_include_tag 'prototype'
   = javascript_include_tag 'lattice'
 - content_for :title do
   %title= title_with_name('item matrix')
