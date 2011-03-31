@@ -11,7 +11,7 @@ require 'fastercsv'
 require 'sequel'
 require 'lib/item.rb'
 
-Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://model/lines.db', :encoding => 'utf8')
+Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://model/lines.db')
 require 'model/station.rb'
 require 'model/prefecture.rb'
 
