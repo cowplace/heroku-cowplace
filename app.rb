@@ -8,8 +8,12 @@ Sinatra::Base.register SinatraMore::MarkupPlugin
 Sinatra::Base.register SinatraMore::RenderPlugin
 
 require 'fastercsv'
-require 'lib/station.rb'
+require 'sequel'
 require 'lib/item.rb'
+
+Sequel.connect('sqlite://model/lines.db', :encoding => 'utf8')
+require 'model/station.rb'
+require 'model/prefecture.rb'
 
 get '/' do
   @kinds = [
@@ -43,6 +47,7 @@ end
 get '/visualized_sorting_algorithm' do
   @kinds = [
     [:bu, 'bubble'],
+    [:st, 'stone'],
     [:se, 'select'],
     [:in, 'insert'],
     [:he, 'heap'],
@@ -108,18 +113,18 @@ end
 
 get '/station' do
   @kind = 'station'
-  @kinds = Prefectures.get_list
-  @stations = Station.get_stations
+  @kinds = Prefecture.all.map{|e| e.name}
+  @stations = Station.normalized_all
   @navi = breadcrumb_list(:station)
   haml :station
 end
 
 get '/station/:prefecture' do |prefecture|
   @kind = 'station'
-  @kinds = Prefectures.get_list
-  if @kinds.include?(prefecture) then
-    @stations = Station.get_stations(Prefectures.get_no(prefecture))
-    Station.set_line(@stations)
+  @kinds = Prefecture.all.map{|e| e.name}
+  pref = Prefecture.find(:name => prefecture)
+  if !pref.nil? then
+    @stations = Station.normalized_all(:pref_id => pref.id)
     @navi = breadcrumb_list([:station, prefecture])
     haml :station
   else

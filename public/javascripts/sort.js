@@ -45,8 +45,17 @@
     },
     busort: function(){
       for(var i=0;i<this.length;i++){
+        for(var j=this.length-1;j>i;j--){
+          if(this[j]<this[j-1]){
+            this.swap(j,j-1);
+          }
+        }
+      }
+    },
+    stsort: function(){
+      for(var i=0;i<this.length;i++){
         for(var j=1;j<this.length-i+1;j++){
-          if(this[j-1]>this[j]){
+          if(this[j]<this[j-1]){
             this.swap(j-1,j);
           }
         }
