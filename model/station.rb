@@ -27,9 +27,11 @@ class Station < Sequel::Model
   class << self
     def normalized_all(conf = {})
       elems = Station.filter(conf).all
-      lat_range = elems.map{|e| e.lat}.minmax
-      lon_range = elems.map{|e| e.lon}.minmax
-      return elems.each{|e| e.mod_pos(lat_range.first, lat_range.last, lon_range.first, lon_range.last)}
+      lat_min = elems.map{|e| e.lat}.min
+      lat_max = elems.map{|e| e.lat}.max
+      lon_min = elems.map{|e| e.lon}.min
+      lon_max = elems.map{|e| e.lon}.max
+      return elems.each{|e| e.mod_pos(lat_min, lat_max, lon_min, lon_max)}
     end
   end
 end
