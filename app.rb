@@ -11,9 +11,10 @@ require 'fastercsv'
 require 'sequel'
 require 'lib/item.rb'
 
-Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://model/lines.db')
+Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://batch/lines.db')
 require 'model/station.rb'
 require 'model/prefecture.rb'
+require 'model/connection.rb'
 
 get '/' do
   @kinds = [
@@ -125,6 +126,7 @@ get '/station/:prefecture' do |prefecture|
   pref = Prefecture.find(:name => prefecture)
   if !pref.nil? then
     @stations = Station.normalized_all(:pref_id => pref.id)
+    @rails = Connection.normalized_all(:pref_id => pref.id)
     @navi = breadcrumb_list([:station, prefecture])
     haml :station
   else

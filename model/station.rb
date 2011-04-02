@@ -26,12 +26,14 @@ class Station < Sequel::Model
 
   class << self
     def normalized_all(conf = {})
-      elems = Station.filter(conf).all
-      lat_min = elems.map{|e| e.lat}.min
-      lat_max = elems.map{|e| e.lat}.max
-      lon_min = elems.map{|e| e.lon}.min
-      lon_max = elems.map{|e| e.lon}.max
-      return elems.each{|e| e.mod_pos(lat_min, lat_max, lon_min, lon_max)}
+      stations = Station.filter(conf)
+      lat_min = stations.min(:lat)
+      lat_max = stations.max(:lat)
+      lon_min = stations.min(:lon)
+      lon_max = stations.max(:lon)
+      return stations.all.each do 
+        |e| e.mod_pos(lat_min, lat_max, lon_min, lon_max)
+      end
     end
   end
 end
