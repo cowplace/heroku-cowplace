@@ -27,6 +27,7 @@ get '/' do
     [:graphics, 'graphics'],
     [:station, 'station'],
     [:lattice, 'lattice'],
+    [:rails, 'rails'],
   ]
   @navi = breadcrumb_list
   haml :index
@@ -138,6 +139,11 @@ get '/lattice' do
   @navi = breadcrumb_list(:lattice)
   @items = Item.get_items
   haml :lattice
+end
+
+get '/rails' do
+  @navi = breadcrumb_list(:rails)
+  haml :rails
 end
 
 get '/top' do
