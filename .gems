@@ -3,4 +3,4 @@ fastercsv --version 1.5.3
 thor --version 0.13.6
 sinatra_more --version 0.3.40
 sequel --version 3.20.0
-
+nokogiri --version 1.4.4
