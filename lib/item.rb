@@ -13,8 +13,8 @@ class Item
     def get_items
       items = []
       urls = []
-      %w(-releaseDate -reviewCount sales).each do |method|
-        (1..2).each do |idx|
+      %w(-releaseDate).each do |method|
+        (1..3).each do |idx|
           urls << "http://api.rakuten.co.jp/rws/3.0/rest?developerId=c9e2d430e9844443674e9cc80c63845a&affiliateId=0d65000a.224c5bad.0d65000b.0995e2dd&operation=BooksBookSearch&version=2011-01-27&publisherName=%e3%82%aa%e3%83%a9%e3%82%a4%e3%83%aa%e3%83%bc&page=#{idx}&sort=#{method}"
         end
       end
