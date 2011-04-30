@@ -82,6 +82,7 @@ end
 get '/field' do
   @kind = 'field'
   @navi = breadcrumb_list(:field)
+  @nodes = (0..99).to_a
   haml :field
 end
 
