@@ -84,72 +84,83 @@
       }
     }
   );
-  grid_env.init(global_width, global_height, 150);
+  grid_env.init(global_width, global_height, 200);
   var items = [];
-  var initialize = function(){
-    $('.item').each(function(i){
-      $(this).css({
-        top : Math.floor(Math.random()*global_height+1),
-        left : Math.floor(Math.random()*global_width+1)
+  var extension = {
+    init: function(){
+      this.vx = 0;
+      this.vy = 0;
+      this.x = this.position().left;
+      this.y = this.position().top;
+      this.height = this.height();
+      this.width = this.width();
+      this.width_bound = global_width - this.width;
+      this.height_bound = global_height - this.height;
+    },
+    tention: function(other){
+      var min_dist = 100;
+      var dx = this.x - other.x;
+      var dy = this.y - other.y;
+      var dist = Math.sqrt(dx*dx+dy*dy);
+      if(dist < min_dist){
+        var ratio = (min_dist - dist)/min_dist;
+        context.beginPath();
+        context.strokeStyle = 'rgba(0, 0, 0, '+ratio+')';
+        context.moveTo(this.x + this.width/2, this.y + this.height/2);
+        context.lineTo(other.x + other.width/2, other.y + other.height/2);
+        context.closePath();
+        context.stroke();
+        var string_arg = 0.001 * ratio;
+        var ax = dx * string_arg;
+        var ay = dy * string_arg;
+        this.vx += ax;
+        this.vy += ay;
+        other.vx -= ax;
+        other.vy -= ay;
+      }
+    },
+    bounce: function(){
+      if(this.x < 0){
+        this.x = 0;
+        this.vx = -this.vx;
+      } else if(this.x > this.width_bound){
+        this.x = this.width_bound;
+        this.vx = -this.vx;
+      }
+      if(this.y < 0){
+        this.y = 0;
+        this.vy = -this.vy;
+      } else if(this.y > this.height_bound){
+        this.y = this.height_bound;
+        this.vy = -this.vy;
+      }
+    },
+    move: function(){
+      this.x += this.vx;
+      this.y += this.vy;
+      context.beginPath();
+      context.fillStyle = 'rgb(255, 255, 255)';
+      context.arc(this.x + this.width/2, this.y + this.height/2, 10, 0,  Math.PI*2, true);
+      context.closePath();
+      context.fill();
+      this.css({
+        left : this.x,
+        top : this.y
       });
-      items.push($.extend(
-        $(this),
-        {
-          vx: 0,
-          vy: 0,
-          x: $(this).position().left,
-          y: $(this).position().top,
-          height: $(this).height(),
-          width: $(this).width(),
-          tention: function(other){
-            var min_dist = 100;
-            var dx = this.x - other.x;
-            var dy = this.y - other.y;
-            var dist = Math.sqrt(dx*dx+dy*dy);
-            if(dist < min_dist){
-              var ratio = (min_dist - dist)/min_dist;
-              context.beginPath();
-              context.strokeStyle = 'rgba(0, 0, 0, '+ratio+')';
-              context.moveTo(this.x, this.y);
-              context.lineTo(other.x, other.y);
-              context.closePath();
-              context.stroke();
-              var string_arg = 0.001 * ratio;
-              var ax = dx * string_arg;
-              var ay = dy * string_arg;
-              this.vx += ax;
-              this.vy += ay;
-              other.vx -= ax;
-              other.vy -= ay;
-            }
-          },
-          bounce: function(){
-            if(this.x < 0){
-              this.x = 0;
-              this.vx = -this.vx;
-            } else if(this.x + this.width > global_width){
-              this.x = global_width - this.width;
-              this.vx = -this.vx;
-            }
-            if(this.y < 0){
-              this.y = 0;
-              this.vy = -this.vy;
-            } else if(this.y + this.height > global_height){
-              this.y = global_height - this.height;
-              this.vy = -this.vy;
-            }
-          },
-          move: function(){
-            this.x += this.vx;
-            this.y += this.vy;
-            this.css({
-              left : this.x,
-              top : this.y
-            });
-          }
-        }
-      ));
+    }
+  };
+  $('.item').each(function(i){
+    $(this).css({
+      top : Math.floor(Math.random()*global_height+1),
+      left : Math.floor(Math.random()*global_width+1)
     });
+    items.push($.extend($(this), extension));
+  });
+  var items_length = items.length;
+  var initialize = function(){
+    for(var i=0;i<items_length;++i){
+      items[i].init();
+    }
   }
 
   var update = function(){
@@ -159,10 +170,11 @@
     for(var i=0;i<check_size;i+=2){
       checks[i].tention(checks[i+1]);
     }
-    $.each(items, function(idx, elem){
+    for(var i=0;i<items_length;++i){
+      var elem = items[i];
       elem.bounce();
       elem.move();
-    });
+    }
   };
 
   $(document).ready(function(){
