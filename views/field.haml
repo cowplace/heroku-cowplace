@@ -4,10 +4,16 @@
 - content_for :header do
   = stylesheet_link_tag 'positioning'
 - content_for :scripts do
+  = javascript_include_tag 'jquery.ui.core.min'
+  = javascript_include_tag 'jquery.ui.widget.min'
+  = javascript_include_tag 'jquery.ui.mouse.min'
+  = javascript_include_tag 'jquery.ui.draggable.min'
   = javascript_include_tag 'excanvas'
   = javascript_include_tag 'positioning'
 
 %div{:id => 'content'}
-- @nodes.each do |node|
-  %div{:class => 'item'}
-    %span= node
+  - @nodes.each do |node|
+    %div{:class => 'item'}
+      %span= node
+  - (0..75).map{|e| @nodes.sample(2)}.each do |edge|
+    %div{:class => 'edge', :from => edge.first, :to => edge.last}

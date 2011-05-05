@@ -84,7 +84,7 @@
       }
     }
   );
-  grid_env.init(global_width, global_height, 200);
+  grid_env.init(global_width, global_height, 150);
   var items = [];
   var extension = {
     init: function(){
@@ -96,6 +96,10 @@
       this.width = this.width();
       this.width_bound = global_width - this.width;
       this.height_bound = global_height - this.height;
+    },
+    reposition: function(){
+      this.x = this.position().left;
+      this.y = this.position().top;
     },
     tention: function(other){
       var min_dist = 100;
@@ -110,7 +114,7 @@
         context.lineTo(other.x + other.width/2, other.y + other.height/2);
         context.closePath();
         context.stroke();
-        var string_arg = 0.001 * ratio;
+        var string_arg = 0.05 * ratio / dist;
         var ax = dx * string_arg;
         var ay = dy * string_arg;
         this.vx += ax;
@@ -147,12 +151,30 @@
         left : this.x,
         top : this.y
       });
+      this.vx = 0.99 * this.vx;
+      this.vy = 0.99 * this.vy;
+    },
+    energy: function(){
+      return this.vx * this.vx + this.vy * this.vy;
     }
   };
   $('.item').each(function(i){
     $(this).css({
       top : Math.floor(Math.random()*global_height+1),
       left : Math.floor(Math.random()*global_width+1)
+    });
+    $(this).draggable({
+      stop : function(){
+        if(typeof timer_id == 'undefined'){
+          charge_energy();
+          timer_id = setInterval(update, 1000/30);
+        }
+      },
+      drag : function(e, ui){
+        var idx = $('.item').index(this);
+        items[idx].x = ui.position.left;
+        items[idx].y = ui.position.top;
+      }
     });
     items.push($.extend($(this), extension));
   });
@@ -163,6 +185,7 @@
     }
   }
 
+  var timer_id;
   var update = function(){
     context.clearRect(0,0,global_width,global_height);
     var checks = grid_env.check(items);
@@ -170,15 +193,28 @@
     for(var i=0;i<check_size;i+=2){
       checks[i].tention(checks[i+1]);
     }
+    var sum_of_energy = 0;
     for(var i=0;i<items_length;++i){
       var elem = items[i];
       elem.bounce();
       elem.move();
+      sum_of_energy += elem.energy();
+    }
+    if(sum_of_energy < 0.4){
+      clearInterval(timer_id);
+      timer_id = undefined;
+    }
+  };
+
+  var charge_energy = function(){
+    for(var i=0;i<10;i++){
+      update();
     }
   };
 
   $(document).ready(function(){
     initialize();
+    charge_energy();
     timer_id = setInterval(update, 1000/30);
   });
 })(jQuery);
