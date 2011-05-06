@@ -100,6 +100,8 @@
     reposition: function(){
       this.x = this.position().left;
       this.y = this.position().top;
+      this.vx = 0;
+      this.vy = 0;
     },
     gravity: function(other){
       var min_dist = 100*100;
@@ -117,7 +119,7 @@
       }
     },
     tention: function(other){
-      var min_dist = 10;
+      var min_dist = 20;
       var dx = this.x - other.x;
       var dy = this.y - other.y;
       var dist = Math.sqrt(dx*dx+dy*dy);
@@ -127,14 +129,19 @@
       context.lineTo(other.x + other.width/2, other.y + other.height/2);
       context.closePath();
       context.stroke();
+      var string_arg = 0.0005;
+      var ax = dx * string_arg;
+      var ay = dy * string_arg;
       if(dist > min_dist){
-        var string_arg = 0.0005;
-        var ax = dx * string_arg;
-        var ay = dy * string_arg;
         this.vx -= ax;
         this.vy -= ay;
         other.vx += ax;
         other.vy += ay;
+      } else {
+        this.vx += ax;
+        this.vy += ay;
+        other.vx -= ax;
+        other.vy -= ay;
       }
     },
     bounce: function(){
@@ -194,7 +201,6 @@
   });
   var edges = [];
   $('.edge').each(function(i){
-    console.log($(this).attr('from') + "->" + $(this).attr('to'));
     edges.push([items[parseInt($(this).attr('from'))],items[parseInt($(this).attr('to'))]]);
   });
   var items_length = items.length;

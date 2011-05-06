@@ -23,5 +23,5 @@
     - @nodes.each do |node|
       %div{:class => 'item'}
         %span= node
-    - (0..64).map{|e| @nodes.sample(2)}.each do |edge|
+    - @edges.each do |edge|
       %div{:class => 'edge', :from => edge.first, :to => edge.last}

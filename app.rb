@@ -10,6 +10,7 @@ Sinatra::Base.register SinatraMore::RenderPlugin
 require 'fastercsv'
 require 'sequel'
 require 'lib/item.rb'
+require 'lib/graph.rb'
 
 Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://batch/lines.db')
 require 'model/station.rb'
@@ -90,7 +91,11 @@ get '/field/:kind' do |kind|
   if @kinds.include?(kind) then
     @kind = kind
     @navi = breadcrumb_list([:field, @kind])
-    @nodes = (0..99).to_a
+    graph = Graph.new(100, 100)
+    graph.create_nodes
+    graph.create_tree_edges
+    @nodes = graph.nodes
+    @edges = graph.edges
     haml :field
   else
     redirect '/field'
