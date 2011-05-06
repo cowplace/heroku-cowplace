@@ -1,19 +1,27 @@
 - content_for :title do
-  %title
-    what is necessary for you? @cowplace
+  %title= title_with_name('multi items')
 - content_for :header do
   = stylesheet_link_tag 'positioning'
-- content_for :scripts do
-  = javascript_include_tag 'jquery.ui.core.min'
-  = javascript_include_tag 'jquery.ui.widget.min'
-  = javascript_include_tag 'jquery.ui.mouse.min'
-  = javascript_include_tag 'jquery.ui.draggable.min'
-  = javascript_include_tag 'excanvas'
-  = javascript_include_tag 'positioning'
+- unless @kind.nil? then
+  - content_for :scripts do
+    = javascript_include_tag 'jquery.ui.core.min'
+    = javascript_include_tag 'jquery.ui.widget.min'
+    = javascript_include_tag 'jquery.ui.mouse.min'
+    = javascript_include_tag 'jquery.ui.draggable.min'
+    = javascript_include_tag 'excanvas'
+    = javascript_include_tag @kind
 
-%div{:id => 'content'}
-  - @nodes.each do |node|
-    %div{:class => 'item'}
-      %span= node
-  - (0..75).map{|e| @nodes.sample(2)}.each do |edge|
-    %div{:class => 'edge', :from => edge.first, :to => edge.last}
+- content_for :leftbar do
+  %p please push to start
+  %div
+    %ul
+      - @kinds.each do |kind|
+        %li
+          %a{:href => "/field/#{kind}"}= kind
+- unless @kind.nil? then
+  %div{:id => 'content'}
+    - @nodes.each do |node|
+      %div{:class => 'item'}
+        %span= node
+    - (0..64).map{|e| @nodes.sample(2)}.each do |edge|
+      %div{:class => 'edge', :from => edge.first, :to => edge.last}

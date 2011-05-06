@@ -80,10 +80,21 @@ get '/multi_particles/:kind' do |kind|
 end
 
 get '/field' do
-  @kind = 'field'
+  @kinds = %w(spring coordinate)
   @navi = breadcrumb_list(:field)
-  @nodes = (0..99).to_a
   haml :field
+end
+
+get '/field/:kind' do |kind|
+  @kinds = %w(spring coordinate)
+  if @kinds.include?(kind) then
+    @kind = kind
+    @navi = breadcrumb_list([:field, @kind])
+    @nodes = (0..99).to_a
+    haml :field
+  else
+    redirect '/field'
+  end
 end
 
 get '/visualized_list' do
