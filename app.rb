@@ -91,11 +91,13 @@ get '/field/:kind' do |kind|
   if @kinds.include?(kind) then
     @kind = kind
     @navi = breadcrumb_list([:field, @kind])
-    graph = Graph.new(100, 100)
+    graph = Graph.new(100, 60)
     graph.create_nodes
-    graph.create_tree_edges
+    #graph.create_tree_edges
+    graph.create_random_edges
     @nodes = graph.nodes
     @edges = graph.edges
+    @brothers = graph.brothers
     haml :field
   else
     redirect '/field'

@@ -104,7 +104,7 @@
       this.vy = 0;
     },
     gravity: function(other){
-      var min_dist = 100*100;
+      var min_dist = 60*60;
       var dx = this.x - other.x;
       var dy = this.y - other.y;
       var dist = dx*dx+dy*dy;
@@ -118,20 +118,13 @@
         other.vy -= ay;
       }
     },
-    tention: function(other){
-      var min_dist = 20;
+    tention: function(other, min_dist){
       var dx = this.x - other.x;
       var dy = this.y - other.y;
       var dist = Math.sqrt(dx*dx+dy*dy);
-      context.beginPath();
-      context.strokeStyle = 'rgb(0, 0, 0)';
-      context.moveTo(this.x + this.width/2, this.y + this.height/2);
-      context.lineTo(other.x + other.width/2, other.y + other.height/2);
-      context.closePath();
-      context.stroke();
-      var string_arg = 0.0005;
-      var ax = dx * string_arg;
-      var ay = dy * string_arg;
+      var spring_arg = 0.001;
+      var ax = dx * spring_arg;
+      var ay = dy * spring_arg;
       if(dist > min_dist){
         this.vx -= ax;
         this.vy -= ay;
@@ -143,6 +136,18 @@
         other.vx -= ax;
         other.vy -= ay;
       }
+    },
+    add_edge: function(other){
+      this.tention(other, 50);
+      context.beginPath();
+      context.strokeStyle = 'rgb(0,0,0)';
+      context.moveTo(this.x + this.width/2, this.y + this.height/2);
+      context.lineTo(other.x + other.width/2, other.y + other.height/2);
+      context.closePath();
+      context.stroke();
+    },
+    add_brother: function(other){
+      this.tention(other, 30);
     },
     bounce: function(){
       if(this.x < 0){
@@ -201,10 +206,17 @@
   });
   var edges = [];
   $('.edge').each(function(i){
-    edges.push([items[parseInt($(this).attr('from'))],items[parseInt($(this).attr('to'))]]);
+    edges.push(items[parseInt($(this).attr('from'))]);
+    edges.push(items[parseInt($(this).attr('to'))]);
+  });
+  var brothers = [];
+  $('.brother').each(function(i){
+    brothers.push(items[parseInt($(this).attr('from'))]);
+    brothers.push(items[parseInt($(this).attr('to'))]);
   });
   var items_length = items.length;
   var edges_length = edges.length;
+  var brothers_length = brothers.length;
   var initialize = function(){
     for(var i=0;i<items_length;++i){
       items[i].init();
@@ -219,8 +231,11 @@
     for(var i=0;i<check_size;i+=2){
       checks[i].gravity(checks[i+1]);
     }
-    for(var i=0;i<edges_length;i++){
-      edges[i][0].tention(edges[i][1]);
+    for(var i=0;i<edges_length;i+=2){
+      edges[i].add_edge(edges[i+1]);
+    }
+    for(var i=0;i<brothers_length;i+=2){
+      brothers[i].add_brother(brothers[i+1]);
     }
     var sum_of_energy = 0;
     for(var i=0;i<items_length;++i){

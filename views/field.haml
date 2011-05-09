@@ -25,3 +25,5 @@
         %span= node
     - @edges.each do |edge|
       %div{:class => 'edge', :from => edge.first, :to => edge.last}
+    - @brothers.each do |brother|
+      %div{:class => 'brother', :from => brother.first, :to => brother.last}
