@@ -90,6 +90,8 @@
     init: function(){
       this.vx = 0;
       this.vy = 0;
+      this.level = 0;
+      this.idx = 0;
       this.x = this.position().left;
       this.y = this.position().top;
       this.height = this.height();
@@ -103,42 +105,37 @@
       this.vx = 0;
       this.vy = 0;
     },
-    gravity: function(other){
-      var min_dist = 60*60;
-      var dx = this.x - other.x;
-      var dy = this.y - other.y;
-      var dist = dx*dx+dy*dy;
-      if(dist < min_dist){
-        var string_arg = 1 / dist;
-        var ax = dx * string_arg;
-        var ay = dy * string_arg;
-        this.vx += ax;
-        this.vy += ay;
-        other.vx -= ax;
-        other.vy -= ay;
-      }
-    },
-    tention: function(other, min_dist){
+    gravity: function(other, min_dist){
       var dx = this.x - other.x;
       var dy = this.y - other.y;
       var dist = Math.sqrt(dx*dx+dy*dy);
-      var spring_arg = 0.001;
-      var ax = dx * spring_arg;
-      var ay = dy * spring_arg;
-      if(dist > min_dist){
-        this.vx -= ax;
-        this.vy -= ay;
-        other.vx += ax;
-        other.vy += ay;
-      } else {
-        this.vx += ax;
-        this.vy += ay;
+      var cos = dx/dist;
+      var sin = dy/dist;
+      if(dist < min_dist){
+        var ax = cos * (min_dist - dist) * 0.01;
+        var ay = sin * (min_dist - dist) * 0.01;
+        this.vx  += ax;
+        this.vy  += ay;
         other.vx -= ax;
         other.vy -= ay;
       }
     },
+    tention: function(other, min_dist, spring_arg){
+      var dx = this.x - other.x;
+      var dist = Math.sqrt(dx*dx);
+      var cos = dx/dist;
+      if(dist < min_dist){
+        var ax = cos * (min_dist - dist) * spring_arg;
+        this.vx  += ax;
+        other.vx -= ax;
+      } else {
+        var ax = cos * (dist - min_dist) * spring_arg;
+        this.vx  -= ax;
+        other.vx += ax;
+      }
+    },
     add_edge: function(other){
-      this.tention(other, 50);
+      this.tention(other, 0, 0.001);
       context.beginPath();
       context.strokeStyle = 'rgb(0,0,0)';
       context.moveTo(this.x + this.width/2, this.y + this.height/2);
@@ -147,27 +144,31 @@
       context.stroke();
     },
     add_brother: function(other){
-      this.tention(other, 30);
+      this.tention(other, 70, 0.001);
     },
     bounce: function(){
       if(this.x < 0){
         this.x = 0;
-        this.vx = -this.vx;
+        this.vx = -0.9 * this.vx;
       } else if(this.x > this.width_bound){
         this.x = this.width_bound;
-        this.vx = -this.vx;
+        this.vx = -0.9 * this.vx;
       }
       if(this.y < 0){
         this.y = 0;
-        this.vy = -this.vy;
+        this.vy = -0.9 * this.vy;
       } else if(this.y > this.height_bound){
         this.y = this.height_bound;
-        this.vy = -this.vy;
+        this.vy = -0.9 * this.vy;
       }
     },
     move: function(){
       this.x += this.vx;
       this.y += this.vy;
+      this.vx = 0.9 * this.vx;
+      this.vy = 0.9 * this.vy;
+    },
+    show: function(){
       context.beginPath();
       context.fillStyle = 'rgb(255, 255, 255)';
       context.arc(this.x + this.width/2, this.y + this.height/2, 10, 0,  Math.PI*2, true);
@@ -177,8 +178,6 @@
         left : this.x,
         top : this.y
       });
-      this.vx = 0.99 * this.vx;
-      this.vy = 0.99 * this.vy;
     },
     energy: function(){
       return this.vx * this.vx + this.vy * this.vy;
@@ -205,10 +204,30 @@
     items.push($.extend($(this), extension));
   });
   var edges = [];
+  var depth = {};
   $('.edge').each(function(i){
-    edges.push(items[parseInt($(this).attr('from'))]);
-    edges.push(items[parseInt($(this).attr('to'))]);
+    var from = parseInt($(this).attr('from'));
+    var to = parseInt($(this).attr('to'));
+    edges.push(items[from]);
+    edges.push(items[to]);
+    if(typeof depth[from] === 'undefined'){
+      depth[from] = [];
+    }
+    depth[from].push(to);
   });
+  var dfs_traverse = function(node_no, current_depth){
+    var node = items[node_no];
+    node.x = (global_width - 10)/items_length * xpos + 5;
+    node.level = current_depth;
+    var children = depth[node_no];
+    if(typeof children != 'undefined'){
+      var sorted_children = children.sort(function(a,b){return a-b;});
+      var children_length = children.length;
+      for(var i=0;i<children_length;i++){
+        dfs_traverse(sorted_children[i], current_depth+1, xpos++);
+      }
+    }
+  }
   var brothers = [];
   $('.brother').each(function(i){
     brothers.push(items[parseInt($(this).attr('from'))]);
@@ -217,9 +236,18 @@
   var items_length = items.length;
   var edges_length = edges.length;
   var brothers_length = brothers.length;
+  var max_depth = 0;
+  var xpos = 0;
   var initialize = function(){
-    for(var i=0;i<items_length;++i){
+    for(var i=0;i<items_length;i++){
       items[i].init();
+    }
+    dfs_traverse(0, 1);
+    for(var i=0;i<items_length;i++){
+      var elem = items[i]; 
+      if(elem.level > max_depth){
+        max_depth = elem.level;
+      }
     }
   }
 
@@ -229,7 +257,7 @@
     var checks = grid_env.check(items);
     var check_size = checks.length;
     for(var i=0;i<check_size;i+=2){
-      checks[i].gravity(checks[i+1]);
+      checks[i].gravity(checks[i+1], global_height/max_depth);
     }
     for(var i=0;i<edges_length;i+=2){
       edges[i].add_edge(edges[i+1]);
@@ -242,6 +270,8 @@
       var elem = items[i];
       elem.bounce();
       elem.move();
+      elem.y = (global_height - 50)/max_depth * elem.level + 10;
+      elem.show();
       sum_of_energy += elem.energy();
     }
     if(sum_of_energy < 1.0){

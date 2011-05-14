@@ -81,20 +81,19 @@ get '/multi_particles/:kind' do |kind|
 end
 
 get '/field' do
-  @kinds = %w(spring coordinate)
+  @kinds = %w(spring coordinate level)
   @navi = breadcrumb_list(:field)
   haml :field
 end
 
 get '/field/:kind' do |kind|
-  @kinds = %w(spring coordinate)
+  @kinds = %w(spring coordinate level)
   if @kinds.include?(kind) then
     @kind = kind
     @navi = breadcrumb_list([:field, @kind])
     graph = Graph.new(100, 60)
     graph.create_nodes
-    #graph.create_tree_edges
-    graph.create_random_edges
+    graph.create_tree_edges
     @nodes = graph.nodes
     @edges = graph.edges
     @brothers = graph.brothers
