@@ -91,7 +91,7 @@ get '/field/:kind' do |kind|
   if @kinds.include?(kind) then
     @kind = kind
     @navi = breadcrumb_list([:field, @kind])
-    graph = Graph.new(100, 60)
+    graph = Graph.new(rand(90)+10, 60)
     graph.create_nodes
     graph.create_tree_edges
     @nodes = graph.nodes
