@@ -17,7 +17,7 @@ class Graph
   end
 
   def create_tree_edges
-    @edges = (1...@num_of_node).map{|e| [(0...e).to_a.sample(1), e] }
+    @edges = (1...@num_of_node).map{|e| [(0...e).to_a.sample(1), e] }.sample(@num_of_edge)
     adj_hash = {}
     @edges.each do |pair|
       adj_hash[pair.first] = [] if adj_hash[pair.first].nil?

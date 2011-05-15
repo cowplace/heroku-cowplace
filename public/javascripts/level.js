@@ -227,7 +227,36 @@
         dfs_traverse(sorted_children[i], current_depth+1, xpos++);
       }
     }
-  }
+  };
+  var uniq_push = function(elem, ary){
+    var ary_length = ary.length;
+    if(ary_length == 0){
+      ary.push(elem);
+    } else {
+      for(var i=0;i<ary_length;i++){
+        if(ary[i] == elem){
+          break;
+        } else if(i==ary_length-1){
+          ary.push(elem);
+        }
+      }
+    }
+  };
+  var difference = function(base, comp){
+    var result = [];
+    var base_length = base.length;
+    var comp_length = comp.length;
+    for(var i=0;i<base_length;i++){
+      for(var j=0;j<comp_length;j++){
+        if(base[i] == comp[j]){
+          break;
+        } else if(j==comp_length-1){
+          uniq_push(base[i], result);
+        }
+      }
+    }
+    return result;
+  };
   var brothers = [];
   $('.brother').each(function(i){
     brothers.push(items[parseInt($(this).attr('from'))]);
@@ -242,7 +271,19 @@
     for(var i=0;i<items_length;i++){
       items[i].init();
     }
-    dfs_traverse(0, 1);
+    var froms = [];
+    var tos = [];
+    $('.edge').each(function(i){
+      var from = parseInt($(this).attr('from'));
+      var to = parseInt($(this).attr('to'));
+      froms.push(from);
+      tos.push(to);
+    });
+    var roots = difference(froms, tos);
+    var root_length = roots.length;
+    for(var i=0;i<root_length;i++){
+      dfs_traverse(roots[i], 1);
+    }
     for(var i=0;i<items_length;i++){
       var elem = items[i]; 
       if(elem.level > max_depth){
