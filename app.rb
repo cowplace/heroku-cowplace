@@ -24,6 +24,7 @@ get '/' do
     [:visualized_sorting_algorithm, 'sorting'],
     [:multi_particles, 'particles'],
     [:field, 'field'],
+    [:sicp, 'sicp'],
     [:visualized_list, 'list'],
     [:life, 'life'],
     [:graphics, 'graphics'],
