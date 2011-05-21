@@ -11,6 +11,7 @@ require 'fastercsv'
 require 'sequel'
 require 'lib/item.rb'
 require 'lib/graph.rb'
+require 'lib/schemeparser.rb'
 
 Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://batch/lines.db')
 require 'model/station.rb'
@@ -92,6 +93,7 @@ get '/field/:kind' do |kind|
     @kind = kind
     @navi = breadcrumb_list([:field, @kind])
     node_length = rand(90)+10
+    graph = nil
     graph = Graph.new(node_length, rand(node_length/2) + node_length/2)
     graph.create_nodes
     graph.create_tree_edges
@@ -101,6 +103,28 @@ get '/field/:kind' do |kind|
     haml :field
   else
     redirect '/field'
+  end
+end
+
+get '/sicp' do
+  @kinds = (1..46).map{|i| "1.#{i}.scm"}
+  @navi = breadcrumb_list(:sicp)
+  haml :sicp
+end
+
+get '/sicp/:kind' do |kind|
+  @kinds = (1..46).map{|i| "1.#{i}.scm"}
+  if @kinds.include?(kind) then
+    @kind = kind
+    @navi = breadcrumb_list([:sicp, @kind])
+    @code = `cat views/sicp/#{@kind}`
+    graph = SchemeParser.execute(@code)
+    @nodes = graph.nodes
+    @edges = graph.edges
+    @brothers = graph.brothers
+    haml :sicp
+  else
+    redirect '/sicp'
   end
 end
 

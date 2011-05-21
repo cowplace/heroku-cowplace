@@ -1,0 +1,21 @@
+(define (iterative-improve test improve)
+  (lambda (x) 
+    (define (iter x)
+      (if (test x)
+	  x
+	  (iter (improve x))))
+    (iter x)))
+
+(define (sqrt x)
+  (define (good-enough? y)
+    (define (square x) (* x x))
+    (< (abs (- (square y) x)) 0.0001))
+  (define (improve y)
+    (define (average x y) (/ (+ x y) 2))
+    (average y (/ x y)))
+  ((iterative-improve good-enough? improve) 1.0))
+
+(define (fixed-point f)
+  (define (close-enough? y)
+    (< (abs (- y (f y))) 0.00001))
+  ((iterative-improve close-enough? f) 1.0))

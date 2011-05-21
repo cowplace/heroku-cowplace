@@ -1,0 +1,16 @@
+(define (square x) (* x x))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+	((even? exp)
+	 (let ((temp (remainder (square (expmod base (/ exp 2) m)) m)))
+	   (if (and (< 1 temp) (< temp m) (= (remainder (square temp) m) 1))
+	       (display (list base exp temp (remainder (square temp) m)))) temp))
+	(else (remainder (* base (expmod base (- exp 1) m)) m))))
+
+(define (miller-test n)
+  (define (try-it a i)
+    (cond ((= a n) i)
+	  ((> (expmod a (- n 1) n) 1) (try-it (+ a 1) (+ i 1)))
+	  (else (try-it (+ a 1) i))))
+  (try-it 1 0))

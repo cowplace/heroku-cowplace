@@ -1,0 +1,31 @@
+- content_for :title do
+  %title= title_with_name('I want to escape from SICP')
+- content_for :header do
+  = stylesheet_link_tag 'sicp'
+- unless @kind.nil? then
+  - content_for :scripts do
+    = javascript_include_tag 'jquery.ui.core.min'
+    = javascript_include_tag 'jquery.ui.widget.min'
+    = javascript_include_tag 'jquery.ui.mouse.min'
+    = javascript_include_tag 'jquery.ui.draggable.min'
+    = javascript_include_tag 'excanvas'
+    = javascript_include_tag 'scheme'
+
+- content_for :leftbar do
+  %p please select exercise
+  %div
+    %ul
+      - @kinds.each do |kind|
+        %li
+          %a{:href => "/sicp/#{kind}"}= kind
+- unless @kind.nil? then
+  %div{:id => 'content'}
+    - @nodes.each do |node|
+      %div{:class => 'item'}
+        %span= node
+    - @edges.each do |edge|
+      %div{:class => 'edge', :from => edge.first, :to => edge.last}
+    - @brothers.each do |brother|
+      %div{:class => 'brother', :from => brother.first, :to => brother.last}
+    %div{:class => 'code'}
+      %pre= @code
