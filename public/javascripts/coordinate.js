@@ -251,7 +251,7 @@
   };
 
   var charge_energy = function(){
-    for(var i=0;i<10;i++){
+    for(var i=0;i<50;i++){
       update();
     }
   };

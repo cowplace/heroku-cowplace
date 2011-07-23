@@ -12,6 +12,7 @@ require 'sequel'
 require 'lib/item.rb'
 require 'lib/graph.rb'
 require 'lib/schemeparser.rb'
+require 'lib/rubyparser.rb'
 
 Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://batch/lines.db')
 require 'model/station.rb'
@@ -25,6 +26,7 @@ get '/' do
     [:multi_particles, 'particles'],
     [:field, 'field'],
     [:sicp, 'sicp'],
+    [:ruby, 'ruby'],
     [:visualized_list, 'list'],
     [:life, 'life'],
     [:graphics, 'graphics'],
@@ -97,7 +99,15 @@ get '/field/:kind' do |kind|
     graph = nil
     graph = Graph.new(node_length, rand(node_length/2) + node_length/2)
     graph.create_nodes
-    graph.create_tree_edges
+    if kind == 'level' then
+      graph.create_tree_edges
+    else
+      if rand() > 0.5 then
+        graph.create_random_edges
+      else
+        graph.create_tree_edges
+      end
+    end
     @nodes = graph.nodes
     @edges = graph.edges
     @brothers = graph.brothers
@@ -127,6 +137,17 @@ get '/sicp/:kind' do |kind|
   else
     redirect '/sicp'
   end
+end
+
+get '/ruby' do
+  @code = `cat model/prefecture.rb`
+  @kinds = []
+  @kind = 'hoge'
+  graph = RubyTree.execute(@code)
+  @nodes = graph.nodes
+  @edges = graph.edges
+  @brothers = graph.brothers
+  haml :sicp
 end
 
 get '/visualized_list' do
