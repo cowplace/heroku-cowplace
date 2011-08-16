@@ -85,13 +85,13 @@ get '/multi_particles/:kind' do |kind|
 end
 
 get '/field' do
-  @kinds = %w(spring coordinate level)
+  @kinds = %w(spring coordinate level energy)
   @navi = breadcrumb_list(:field)
   haml :field
 end
 
 get '/field/:kind' do |kind|
-  @kinds = %w(spring coordinate level)
+  @kinds = %w(spring coordinate level energy)
   if @kinds.include?(kind) then
     @kind = kind
     @navi = breadcrumb_list([:field, @kind])
