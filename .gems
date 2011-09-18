@@ -8,4 +8,4 @@ haml --version 3.0.12
 i18n --version 0.5.0
 ruby_parser --version 2.0.6
 twitter --version 1.4.0
-hashie --vertion 1.0.0
+hashie --version 1.0.0
