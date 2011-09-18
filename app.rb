@@ -13,6 +13,7 @@ require 'lib/item.rb'
 require 'lib/graph.rb'
 require 'lib/schemeparser.rb'
 require 'lib/rubyparser.rb'
+require 'lib/twitterseeker.rb'
 
 Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://batch/lines.db')
 require 'model/station.rb'
@@ -34,6 +35,7 @@ get '/' do
     [:station, 'station'],
     [:lattice, 'lattice'],
     [:rails, 'rails'],
+    [:twitter, 'twitter'],
   ]
   @navi = breadcrumb_list
   haml :index
@@ -217,6 +219,12 @@ get '/rails' do
   haml :rails
 end
 
+get '/twitter' do
+  @navi = breadcrumb_list(:twitter)
+  @tweets = TwitterSeeker.execute
+  haml :twitter
+end
+
 get '/top' do
   redirect '/'
 end
@@ -232,7 +240,7 @@ helpers do
   end
 
   def breadcrumb_list(routes=[])
-    return ([:top] + [routes]).flatten.map {|pos| link_to(pos,pos)}.join(escape_html(' > '))
+    return (["/top"] + [routes]).flatten.map {|pos| link_to(pos,pos)}.join(escape_html(' > '))
   end
 
   def list2table(list)

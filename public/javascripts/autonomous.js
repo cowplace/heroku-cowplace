@@ -113,13 +113,14 @@
     this.red = Math.floor(Math.random()*255);
     this.green = Math.floor(Math.random()*255);
     this.blue = Math.floor(Math.random()*255);
+    this.color = 'rgb('+this.red+','+this.green+','+this.blue+')';
     this.position = new Vector(
         Math.floor(Math.random()*this.stage_width+1),
         Math.floor(Math.random()*this.stage_height+1)
     );
     this.velocity = new Vector(
-        Math.floor(Math.random()*10+1),
-        Math.floor(Math.random()*10+1)
+        Math.floor(Math.random()*10)-5,
+        Math.floor(Math.random()*10)-5
     );
     this.external_force = new Vector(0,0);
     //this.posision = new Vector(0,0);
@@ -129,7 +130,7 @@
     this.mass = 3.0;
     this.draw = function(){
       this.canvas.beginPath();
-      this.canvas.fillStyle = 'rgb('+this.red+','+this.green+','+this.blue+')';
+      this.canvas.fillStyle = this.color;
       this.canvas.arc(this.position.x, this.position.y, this.mass, 0,  Math.PI*2, true);
       this.canvas.closePath();
       this.canvas.fill();
@@ -205,20 +206,25 @@
   var global_height = $('#main').height();
   $('#content').append('<canvas id="canvas" width="'+global_width+'" height="'+global_height+'" />');
   var context = $('#canvas')[0].getContext('2d');
-  var mousepoint = new Vector(0,0);
-  $('#canvas').mousemove(function(e){
-    mousepoint.x = e.pageX - $('#canvas').offset().left;
-    mousepoint.y = e.pageY - $('#canvas').offset().top;
-  });
   var vehicle;
   var timer_id;
   var vehicles = new Array();
-  var num_of_vehicles = 80;
+  var num_of_vehicles = 70;
   var initialize = function(){
     for (var i=0;i<num_of_vehicles;i++){
       vehicles[i] = new SeekVehicle(context, global_width, global_height);
     }
   };
+  var mouse_on = false;
+  var mousepoint = new Vector(0,0);
+  $('#canvas').mousedown(function(e){
+    mousepoint.x = e.pageX - $('#canvas').offset().left;
+    mousepoint.y = e.pageY - $('#canvas').offset().top;
+    mouse_on = true;
+  });
+  $('#canvas').mouseup(function(e){
+    mouse_on = false;
+  });
   var update = function(){
     for(var i=0;i<num_of_vehicles;i++){
       var target = (i+1)%num_of_vehicles;
@@ -226,12 +232,14 @@
       var vehicle2 = vehicles[target];
       vehicle1.seek(vehicle2.vehicle.position);
       vehicle2.flee(vehicle1.vehicle.position);
-      vehicle1.seek(mousepoint);
-      if (mousepoint.dist(vehicle1.vehicle.position) < 200){
-        vehicle1.vehicle.mass = (200 - mousepoint.dist(vehicle1.vehicle.position))/10 + 3;
-      } else {
-        vehicle1.vehicle.mass = 3.0;
+      if(mouse_on){
+        vehicle1.seek(mousepoint);
       }
+//      if (mousepoint.dist(vehicle1.vehicle.position) < 200){
+//        vehicle1.vehicle.mass = (200 - mousepoint.dist(vehicle1.vehicle.position))/10 + 3;
+//      } else {
+//        vehicle1.vehicle.mass = 3.0;
+//      }
     }
     context.beginPath();
     context.fillStyle = 'rgba(255,255,255,0.2)';

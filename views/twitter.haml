@@ -1,0 +1,12 @@
+- content_for :title do
+  %title= title_with_name('Recent Tweeted Items')
+- content_for :leftbar do
+  %p check new tweeted items
+
+- @tweets.each do |domain, tweets|
+  %h3= domain
+  - tweets.each do |tweet|
+    %div{:class => 'tweet'}
+      %p= tweet[:tweet]
+      %a{:href => tweet[:url]}
+        %img{:src => tweet[:img_src]}
