@@ -1,0 +1,10 @@
+- content_for :title do
+  %title= title_with_name('autonomous')
+- content_for :header do
+  = stylesheet_link_tag 'positioning'
+- content_for :scripts do
+  = javascript_include_tag 'autonomous'
+
+- content_for :leftbar do
+  %p mouse stalker
+%div{:id => 'content'}

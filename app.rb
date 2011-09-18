@@ -25,6 +25,7 @@ get '/' do
     [:visualized_sorting_algorithm, 'sorting'],
     [:multi_particles, 'particles'],
     [:field, 'field'],
+    [:autonomous, 'autonomous'],
     [:sicp, 'sicp'],
     [:ruby, 'ruby'],
     [:visualized_list, 'list'],
@@ -115,6 +116,11 @@ get '/field/:kind' do |kind|
   else
     redirect '/field'
   end
+end
+
+get '/autonomous' do
+  @navi = breadcrumb_list(:autonomous)
+  haml :autonomous
 end
 
 get '/sicp' do
