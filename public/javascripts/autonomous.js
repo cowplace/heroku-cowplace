@@ -109,7 +109,7 @@
     this.stage_height = stage_height;
     this.WRAP = 'wrap';
     this.BOUNCE = 'bounce';
-    this.edge_behavior = this.WRAP;
+    this.edge_behavior = this.BOUNCE;
     this.red = Math.floor(Math.random()*255);
     this.green = Math.floor(Math.random()*255);
     this.blue = Math.floor(Math.random()*255);

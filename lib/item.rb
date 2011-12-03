@@ -21,7 +21,6 @@ class Item
       urls.each do |url|
         xml = Nokogiri::XML(open(url))
         xml.xpath('//Item').each do |item|
-          STDERR.puts item
           items << Item.new(item)
         end
       end

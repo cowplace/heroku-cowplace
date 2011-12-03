@@ -59,7 +59,6 @@
   var checker = new Worker("/javascripts/ball_collision.js");
   checker.onmessage = function(event){
     positions = event.data['positions'];
-    positions = event.data['positions'];
     if(event.data['energys'] < 1.0){
       clearInterval(timer_id);
       timer_id = undefined;

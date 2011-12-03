@@ -200,14 +200,16 @@ onmessage = function(event){
       brothers[i].add_brother(brothers[i+1]);
     }
     var sum_of_energy = 0;
+    var positions = [];
     for(var i=0;i<items_length;++i){
       var elem = items[i];
       elem.bounce();
       elem.move();
+      positions.push({x: elem.x, y:elem.y})
       sum_of_energy += elem.energy();
     }
     postMessage({
-      positions: items,
+      positions: positions,
       energys: sum_of_energy
     });
   }
