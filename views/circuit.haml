@@ -1,5 +1,5 @@
 - content_for :title do
-  %title= title_with_name('multi items')
+  %title= title_with_name('circuit')
 - content_for :header do
   = stylesheet_link_tag 'positioning'
 - unless @kind.nil? then
@@ -17,14 +17,7 @@
     %ul
       - @kinds.each do |kind|
         %li
-          %a{:href => "/field/#{kind}"}= kind
+          %a{:href => "/circuit/#{kind}"}= kind
 - unless @kind.nil? then
   #content
   #data
-    - @nodes.each do |node|
-      %div{:class => 'item'}
-        %span= node
-    - @edges.each do |edge|
-      %div{:class => 'edge', :from => edge.first, :to => edge.last}
-    - @brothers.each do |brother|
-      %div{:class => 'brother', :from => brother.first, :to => brother.last}

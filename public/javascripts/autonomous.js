@@ -226,12 +226,15 @@
     mouse_on = false;
   });
   var update = function(){
+    var num_of_seeks = num_of_vehicles/20;
     for(var i=0;i<num_of_vehicles;i++){
-      var target = (i+1)%num_of_vehicles;
       var vehicle1 = vehicles[i];
-      var vehicle2 = vehicles[target];
-      vehicle1.seek(vehicle2.vehicle.position);
-      vehicle2.flee(vehicle1.vehicle.position);
+      for(var j=1;j<num_of_seeks;j++){
+        var target = (i+j)%num_of_vehicles;
+        var vehicle2 = vehicles[target];
+        vehicle1.seek(vehicle2.vehicle.position);
+        vehicle2.flee(vehicle1.vehicle.position);
+      }
       if(mouse_on){
         vehicle1.seek(mousepoint);
       }

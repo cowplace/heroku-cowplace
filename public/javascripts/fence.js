@@ -121,17 +121,17 @@
       }
     },
     tention: function(other, min_dist, spring_arg){
-      var dx = this.x - other.x;
-      var dist = Math.sqrt(dx*dx);
-      var cos = dx/dist;
+      var dy = this.y - other.y;
+      var dist = Math.sqrt(dy*dy);
+      var cos = dy/dist;
       if(dist < min_dist){
-        var ax = cos * (min_dist - dist) * spring_arg;
-        this.vx  += ax;
-        other.vx -= ax;
+        var ay = cos * (min_dist - dist) * spring_arg;
+        this.vy  += ay;
+        other.vy -= ay;
       } else {
-        var ax = cos * (dist - min_dist) * spring_arg;
-        this.vx  -= ax;
-        other.vx += ax;
+        var ay = cos * (dist - min_dist) * spring_arg;
+        this.vy  -= ay;
+        other.vy += ay;
       }
     },
     add_edge: function(other){
@@ -217,14 +217,14 @@
   });
   var dfs_traverse = function(node_no, current_depth){
     var node = items[node_no];
-    node.x = (global_width - 10)/items_length * xpos + 5;
+    node.y = (global_width - 10)/items_length * ypos + 5;
     node.level = current_depth;
     var children = depth[node_no];
     if(typeof children != 'undefined'){
       var sorted_children = children.sort(function(a,b){return a-b;});
       var children_length = children.length;
       for(var i=0;i<children_length;i++){
-        dfs_traverse(sorted_children[i], current_depth+1, xpos++);
+        dfs_traverse(sorted_children[i], current_depth+1, ypos++);
       }
     }
   };
@@ -266,7 +266,7 @@
   var edges_length = edges.length;
   var brothers_length = brothers.length;
   var max_depth = 0;
-  var xpos = 0;
+  var ypos = 0;
   var initialize = function(){
     for(var i=0;i<items_length;i++){
       items[i].init();
@@ -311,7 +311,7 @@
       var elem = items[i];
       elem.bounce();
       elem.move();
-      elem.y = (global_height - 50)/max_depth * elem.level + 10;
+      elem.x = (global_width - 50)/max_depth * elem.level + 10;
       elem.show();
       sum_of_energy += elem.energy();
     }

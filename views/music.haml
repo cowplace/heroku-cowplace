@@ -1,0 +1,14 @@
+- content_for :title do
+  %title= title_with_name('music')
+- content_for :header do
+  = stylesheet_link_tag 'music'
+- content_for :scripts do
+  = javascript_include_tag 'lib/audio/audio'
+  = javascript_include_tag 'lib/audio/jsfx'
+  = javascript_include_tag 'lib/audio/jsfxlib'
+  = javascript_include_tag 'touch_and_sound'
+
+- content_for :leftbar do
+  %p please click screen to sound
+
+#area

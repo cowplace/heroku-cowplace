@@ -14,6 +14,9 @@
       this.y = Math.floor(Math.random()*global_width+1);
       this.height = this.height();
       this.width = this.width();
+      this.children = [];
+      this.children_length = 0;
+      this.flag = (Math.random() > 0.7);
     },
     transform: function(){
       return new (function(obj){
@@ -33,6 +36,17 @@
         top : this.y
       });
     },
+    add_edge: function(other){
+      this.children_length += 1;
+      this.children.push(other);
+    },
+    draw_edges: function(rate){
+      for(var i=0;i<this.children_length;i++){
+        var child = this.children[i];
+        this.flag = this.flag || child.flag;
+        this.draw_edge(child,rate);
+      }
+    },
     draw_edge: function(other, rate){
       context.beginPath();
       context.strokeStyle = 'rgb(0,0,0)';
@@ -41,11 +55,13 @@
       context.closePath();
       context.stroke();
 
-      context.beginPath();
-      context.fillStyle = 'rgb(255, 128, 0)';
-      context.arc(rate*this.cx+(1-rate)*other.cx, rate*this.cy+(1-rate)*other.cy, 5, 0,  Math.PI*2, true);
-      context.closePath();
-      context.fill();
+      if(other.flag){
+        context.beginPath();
+        context.fillStyle = 'rgb(255, 128, 0)';
+        context.arc(rate*this.cx+(1-rate)*other.cx, rate*this.cy+(1-rate)*other.cy, 5, 0,  Math.PI*2, true);
+        context.closePath();
+        context.fill();
+      }
     },
     draw: function(){
       context.beginPath();
@@ -68,6 +84,8 @@
     $('.item').each(function(i){
       $(this).draggable({
         stop : function(){
+          var idx = $('.item').index(this);
+          items[idx].flag = !items[idx].flag;
           if(typeof timer_id == 'undefined'){
             timer_id = setInterval(update, 1000/30);
           }
@@ -92,11 +110,11 @@
     });
     var edge_nos = [];
     $('.edge').each(function(i){
-      edge_nos.push(parseInt($(this).attr('from')));
-      edge_nos.push(parseInt($(this).attr('to')));
-    });
-    edges = $.map(edge_nos, function(n,i){
-      return items[n];
+      var from = parseInt($(this).attr('from'));
+      var to = parseInt($(this).attr('to'));
+      items[from].add_edge(items[to]);
+      edge_nos.push(from);
+      edge_nos.push(to);
     });
     var brother_nos = [];
     $('.brother').each(function(i){
@@ -131,9 +149,9 @@
       items[i].reposition(point.x, point.y);
     }
     context.clearRect(0,0,global_width,global_height);
-    for(var i=0;i<edges_length;i+=2){
+    for(var i=0;i<items_length;++i){
       time_div = (++time_div) % time_quota;
-      edges[i].draw_edge(edges[i+1], time_div/time_quota);
+      items[i].draw_edges(time_div/time_quota);
     }
     for(var i=0;i<items_length;++i){
       items[i].draw();

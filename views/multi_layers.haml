@@ -1,0 +1,20 @@
+- content_for :title do
+  %title= title_with_name('multi layers')
+- content_for :header do
+  = stylesheet_link_tag 'positioning'
+- unless @kind.nil? then
+  - content_for :scripts do
+    = javascript_include_tag 'excanvas'
+    = javascript_include_tag @kind
+
+- content_for :leftbar do
+  %p please push to start
+  %div
+    %ul
+      - @kinds.each do |kind|
+        %li
+          %a{:href => "/multi_layers/#{kind}"}= kind
+- unless @kind.nil? then
+  %div{:id => 'content'}
+  - 70.times do |i|
+    %div.item= i

@@ -17,12 +17,7 @@ class Graph
   end
 
   def create_tree_edges
-    @edges = (1...@num_of_node).map{|e| [(0...e).to_a.sample(1), e] }.sample(@num_of_edge)
-    adj_hash = {}
-    @edges.each do |pair|
-      adj_hash[pair.first] = [] if adj_hash[pair.first].nil?
-      adj_hash[pair.first] << pair.last
-    end
+    adj_hash = hash_edges
     @brothers = []
     adj_hash.values.find_all{|e| e.length > 1}.each do |ary|
       ary.each_with_index do |elem,idx|
@@ -30,5 +25,15 @@ class Graph
         @brothers << [elem, ary[idx+1]]
       end
     end
+  end
+
+  def hash_edges
+    @edges = (1...@num_of_node).map{|e| [(0...e).to_a.sample(1), e] }.sample(@num_of_edge)
+    adj_hash = {}
+    @edges.each do |pair|
+      adj_hash[pair.first] = [] if adj_hash[pair.first].nil?
+      adj_hash[pair.first] << pair.last
+    end
+    return adj_hash
   end
 end

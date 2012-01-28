@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'haml'
 require 'sass'
+require 'json'
 require 'sinatra'
 require 'sinatra_more/markup_plugin'
 require 'sinatra_more/render_plugin'
@@ -26,12 +27,14 @@ get '/' do
     [:visualized_sorting_algorithm, 'sorting'],
     [:multi_particles, 'particles'],
     [:field, 'field'],
+    [:multi_layers, 'multi_layers'],
     [:autonomous, 'autonomous'],
     [:sicp, 'sicp'],
     [:ruby, 'ruby'],
     [:visualized_list, 'list'],
     [:life, 'life'],
     [:graphics, 'graphics'],
+    [:music, 'sound'],
     [:station, 'station'],
     [:lattice, 'lattice'],
     [:rails, 'rails'],
@@ -88,13 +91,13 @@ get '/multi_particles/:kind' do |kind|
 end
 
 get '/field' do
-  @kinds = %w(spring coordinate level energy)
+  @kinds = %w(spring coordinate level energy fence)
   @navi = breadcrumb_list(:field)
   haml :field
 end
 
 get '/field/:kind' do |kind|
-  @kinds = %w(spring coordinate level energy)
+  @kinds = %w(spring coordinate level energy fence)
   if @kinds.include?(kind) then
     @kind = kind
     @navi = breadcrumb_list([:field, @kind])
@@ -102,7 +105,7 @@ get '/field/:kind' do |kind|
     graph = nil
     graph = Graph.new(node_length, rand(node_length/2) + node_length/2)
     graph.create_nodes
-    if kind == 'level' then
+    if %w(level fence).include?(kind) then
       graph.create_tree_edges
     else
       if rand() > 0.5 then
@@ -118,6 +121,53 @@ get '/field/:kind' do |kind|
   else
     redirect '/field'
   end
+end
+
+get '/multi_layers' do
+  @kinds = %w(multi_layers_base)
+  @navi = breadcrumb_list(:multi_layers)
+  haml :multi_layers
+end
+
+get '/multi_layers/:kind' do |kind|
+  @kinds = %w(multi_layers_base)
+  if @kinds.include?(kind) then
+    @kind = kind
+    @navi = breadcrumb_list(:multi_layers)
+    haml :multi_layers
+  else
+    redirect '/multi_layers'
+  end
+end
+
+get '/circuit' do
+  @kinds = %w(circuit_base)
+  @navi = breadcrumb_list(:circuit)
+  haml :circuit
+end
+
+get '/circuit/:kind' do |kind|
+  @kinds = %w(circuit_base)
+  if @kinds.include?(kind) then
+    @kind = kind
+    @navi = breadcrumb_list(:circuit)
+    haml :circuit
+  else
+    redirect '/circuit'
+  end
+end
+
+get '/music' do
+  haml :music
+end
+
+get '/api/tree.json' do
+  content_type :json, :charset => 'utf-8'
+  node_length = rand(90)+10
+  graph = nil
+  graph = Graph.new(node_length, node_length)
+  graph.create_nodes
+  graph.hash_edges.to_json
 end
 
 get '/autonomous' do
