@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 13.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0"
+	 id="svg2" inkscape:output_extension="org.inkscape.output.svg.inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" sodipodi:version="0.32" xmlns:cc="http://creativecommons.org/ns#" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:svg="http://www.w3.org/2000/svg" sodipodi:docname="NOT ANSI.svg" inkscape:version="0.46" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="50px"
+	 viewBox="0 0 100 50" enable-background="new 0 0 100 50" xml:space="preserve">
+<defs>
+	
+	
+		<inkscape:perspective  id="perspective2714" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="25 : 10 : 1" inkscape:vp_x="0 : 15 : 1" inkscape:vp_z="50 : 15 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective2806" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="0.5 : 0.33333333 : 1" inkscape:vp_x="0 : 0.5 : 1" inkscape:vp_z="1 : 0.5 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective2819" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="372.04724 : 350.78739 : 1" inkscape:vp_x="0 : 526.18109 : 1" inkscape:vp_z="744.09448 : 526.18109 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective2777" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="75 : 40 : 1" inkscape:vp_x="0 : 60 : 1" inkscape:vp_z="150 : 60 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective3275" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="50 : 33.333333 : 1" inkscape:vp_x="0 : 50 : 1" inkscape:vp_z="100 : 50 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective5533" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="32 : 21.333333 : 1" inkscape:vp_x="0 : 32 : 1" inkscape:vp_z="64 : 32 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective2557" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="25 : 16.666667 : 1" inkscape:vp_x="0 : 25 : 1" inkscape:vp_z="50 : 25 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+</defs>
+<sodipodi:namedview  id="base" inkscape:snap-bbox="true" inkscape:window-y="0" inkscape:window-x="33" inkscape:window-height="874" inkscape:window-width="1399" gridtolerance="10000" inkscape:grid-points="true" inkscape:grid-bbox="true" showgrid="true" inkscape:current-layer="layer1" inkscape:document-units="px" inkscape:cy="15.288628" inkscape:cx="84.685352" inkscape:zoom="8" inkscape:pageshadow="2" inkscape:pageopacity="0.0" borderopacity="1.0" bordercolor="#666666" pagecolor="#ffffff">
+	
+		<inkscape:grid  color="#0000ff" opacity="0.2" type="xygrid" originy="0px" originx="0px" enabled="true" id="GridFromPre046Settings" visible="true" empspacing="5" empopacity="0.4" empcolor="#0000ff" spacingy="1px" spacingx="1px">
+		</inkscape:grid>
+</sodipodi:namedview>
+<g id="layer1" inkscape:groupmode="layer" inkscape:label="Layer 1">
+	<g id="XMLID_1_">
+		<g>
+			<polygon fill="#FFFFFF" points="68.09,25 31.97,42.59 31.97,7.41 			"/>
+			<path d="M72.16,23.66v2.68l-0.771,0.37C71.14,26.19,71,25.61,71,25c0-0.61,0.14-1.19,0.39-1.71L72.16,23.66z"/>
+			<path d="M68.09,25L31.97,7.41v35.18L68.09,25z M71.39,23.29C71.14,23.81,71,24.39,71,25c0,0.61,0.14,1.19,0.39,1.71L31.12,46.34
+				l-2.15,1.07V45V5V2.59l2.15,1.07L71.39,23.29z"/>
+		</g>
+		<g>
+			<path fill="none" stroke="#000000" stroke-width="3" d="M71.39,23.29C72.03,21.93,73.4,21,75,21c2.21,0,4,1.79,4,4s-1.79,4-4,4
+				c-1.6,0-2.97-0.93-3.61-2.29C71.14,26.19,71,25.61,71,25C71,24.39,71.14,23.81,71.39,23.29z"/>
+		</g>
+	</g>
+</g>
+</svg>

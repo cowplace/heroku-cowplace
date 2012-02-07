@@ -1,7 +1,7 @@
 - content_for :title do
   %title= title_with_name('circuit')
 - content_for :header do
-  = stylesheet_link_tag 'positioning'
+  = stylesheet_link_tag 'circuit'
 - unless @kind.nil? then
   - content_for :scripts do
     = javascript_include_tag 'jquery.ui.core.min'

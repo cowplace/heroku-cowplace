@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 13.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0"
+	 id="svg2" inkscape:output_extension="org.inkscape.output.svg.inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" sodipodi:version="0.32" xmlns:cc="http://creativecommons.org/ns#" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:svg="http://www.w3.org/2000/svg" sodipodi:docname="NAND ANSI.svg" inkscape:version="0.46" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="50px"
+	 viewBox="0 0 100 50" enable-background="new 0 0 100 50" xml:space="preserve">
+<defs>
+	
+	
+		<inkscape:perspective  id="perspective2714" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="25 : 10 : 1" inkscape:vp_x="0 : 15 : 1" inkscape:vp_z="50 : 15 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective2806" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="0.5 : 0.33333333 : 1" inkscape:vp_x="0 : 0.5 : 1" inkscape:vp_z="1 : 0.5 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective2819" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="372.04724 : 350.78739 : 1" inkscape:vp_x="0 : 526.18109 : 1" inkscape:vp_z="744.09448 : 526.18109 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective2777" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="75 : 40 : 1" inkscape:vp_x="0 : 60 : 1" inkscape:vp_z="150 : 60 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective3275" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="50 : 33.333333 : 1" inkscape:vp_x="0 : 50 : 1" inkscape:vp_z="100 : 50 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+	
+		<inkscape:perspective  id="perspective5533" sodipodi:type="inkscape:persp3d" inkscape:persp3d-origin="32 : 21.333333 : 1" inkscape:vp_x="0 : 32 : 1" inkscape:vp_z="64 : 32 : 1" inkscape:vp_y="0 : 1000 : 0">
+		</inkscape:perspective>
+</defs>
+<sodipodi:namedview  id="base" inkscape:snap-bbox="true" inkscape:window-y="0" inkscape:window-x="33" inkscape:window-height="874" inkscape:window-width="1399" gridtolerance="10000" inkscape:grid-points="true" inkscape:grid-bbox="true" showgrid="true" inkscape:current-layer="layer1" inkscape:document-units="px" inkscape:cy="16.442843" inkscape:cx="78.283307" inkscape:zoom="16" inkscape:pageshadow="2" inkscape:pageopacity="0.0" borderopacity="1.0" bordercolor="#666666" pagecolor="#ffffff">
+	
+		<inkscape:grid  color="#0000ff" opacity="0.2" type="xygrid" originy="0px" originx="0px" enabled="true" id="GridFromPre046Settings" visible="true" empspacing="5" empopacity="0.4" empcolor="#0000ff" spacingy="1px" spacingx="1px">
+		</inkscape:grid>
+</sodipodi:namedview>
+<g id="layer1" inkscape:groupmode="layer" inkscape:label="Layer 1">
+	<g id="XMLID_1_">
+		<g>
+			<path fill="#FFFFFF" d="M50.48,7.86c9.76,0,16.66,7.64,16.66,17.14S59.76,42.14,50,42.14H32.86V7.86c7.97,0,13.06,0,15.24,0
+				c1.19,0,1.78,0,2.08,0c0.15,0,0.23,0,0.27,0C50.46,7.86,50.47,7.86,50.48,7.86z"/>
+			<path d="M67.14,25c0-9.5-6.899-17.14-16.66-17.14c-0.01,0-0.02,0-0.03,0c-0.04,0-0.12,0-0.27,0c-0.3,0-0.89,0-2.08,0
+				c-2.18,0-7.27,0-15.24,0v34.28H50C59.76,42.14,67.14,34.5,67.14,25z M50.48,5c11.26,0,20,9,20,20s-8.74,20-20,20H31.43H30v-1.43
+				V6.43V5h1.43C50.48,5,50.48,5,50.48,5z"/>
+		</g>
+		<g>
+			<circle fill="none" stroke="#000000" stroke-width="3" cx="75" cy="25" r="4"/>
+		</g>
+	</g>
+</g>
+</svg>
