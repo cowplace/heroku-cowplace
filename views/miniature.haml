@@ -1,0 +1,12 @@
+- content_for :title do
+  %title= title_with_name('miniature')
+- content_for :header do
+  = stylesheet_link_tag 'miniature'
+- content_for :scripts do
+  = javascript_include_tag 'excanvas'
+  = javascript_include_tag 'miniature'
+
+- content_for :leftbar do
+  %p please look as long as you like
+
+#content

@@ -32,9 +32,11 @@ get '/' do
     [:sicp, 'sicp'],
     [:ruby, 'ruby'],
     [:visualized_list, 'list'],
+    [:circuit, 'circuit'],
     [:life, 'life'],
     [:graphics, 'graphics'],
     [:music, 'sound'],
+    [:miniature, 'miniature'],
     [:station, 'station'],
     [:lattice, 'lattice'],
     [:rails, 'rails'],
@@ -124,13 +126,13 @@ get '/field/:kind' do |kind|
 end
 
 get '/multi_layers' do
-  @kinds = %w(multi_layers_base)
+  @kinds = %w(multi_layers_base hexagons cubes)
   @navi = breadcrumb_list(:multi_layers)
   haml :multi_layers
 end
 
 get '/multi_layers/:kind' do |kind|
-  @kinds = %w(multi_layers_base)
+  @kinds = %w(multi_layers_base hexagons cubes)
   if @kinds.include?(kind) then
     @kind = kind
     @navi = breadcrumb_list(:multi_layers)
@@ -138,6 +140,11 @@ get '/multi_layers/:kind' do |kind|
   else
     redirect '/multi_layers'
   end
+end
+
+get '/miniature' do
+  @navi = breadcrumb_list(:miniature)
+  haml :miniature
 end
 
 get '/circuit' do
