@@ -27,8 +27,21 @@ class Graph
     end
   end
 
-  def hash_edges
+  def hash_tree_edges
     @edges = (1...@num_of_node).map{|e| [(0...e).to_a.sample(1), e] }.sample(@num_of_edge)
+    adj_hash = {}
+    @edges.each do |pair|
+      adj_hash[pair.first] = [] if adj_hash[pair.first].nil?
+      adj_hash[pair.first] << pair.last
+    end
+    return adj_hash
+  end
+
+  def hash_dag_edges
+    @edges = (1...@num_of_node).map{|e| [(0...e).to_a.sample(1), e] }.sample(@num_of_edge)
+    extras = (1...@num_of_node).to_a.sample(10).map{|e| [(0...e).to_a.sample(1), e] }.sample(@num_of_edge)
+    @edges += extras
+    @edges.uniq!
     adj_hash = {}
     @edges.each do |pair|
       adj_hash[pair.first] = [] if adj_hash[pair.first].nil?

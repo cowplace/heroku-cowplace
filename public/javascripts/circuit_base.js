@@ -157,19 +157,22 @@
       }
     },
     draw_edge: function(other, rate){
-      contextb.strokeStyle = 'rgb(0,0,0)';
       contextb.beginPath();
+      contextb.strokeStyle = 'rgb(0,0,0)';
+      contextb.lineWidth = 1.0;
       contextb.moveTo(this.cx, this.cy);
       contextb.lineTo(other.cx, other.cy);
       contextb.closePath();
       contextb.stroke();
-
       if(other.flag){
         contextb.beginPath();
-        contextb.fillStyle = 'rgb(255, 128, 0)';
-        contextb.arc(rate*this.cx+(1-rate)*other.cx, rate*this.cy+(1-rate)*other.cy, 5, 0,  Math.PI*2, true);
+        contextb.strokeStyle = 'rgba(255, 128, 0, 0.7)';
+        contextb.lineWidth = 10;
+        contextb.lineCap = 'round';
+        contextb.moveTo(other.cx, other.cy);
+        contextb.lineTo(rate*this.cx+(1-rate)*other.cx, rate*this.cy+(1-rate)*other.cy);
         contextb.closePath();
-        contextb.fill();
+        contextb.stroke();
       }
     },
     update_status: function(){
@@ -209,12 +212,19 @@
       this.cx = this.x + this.width/2;
       this.cy = this.y + this.height/2;
     },
-    show: function(){
+    show: function(rate){
       context.beginPath();
       context.fillStyle = 'rgb(255, 255, 255)';
       context.arc(this.cx, this.cy, 10, 0,  Math.PI*2, true);
       context.closePath();
       context.fill();
+      if(this.flag){
+        context.beginPath();
+        context.fillStyle = 'rgba(255, 128, 0, 0.5)';
+        context.arc(this.cx, this.cy, 30*(1-rate)+10, 0,  Math.PI*2, true);
+        context.closePath();
+        context.fill();
+      }
       this.css({
         left : this.x,
         top : this.y
@@ -360,7 +370,7 @@
       var elem = items[i];
       elem.draw_edges(time_div/time_quota);
       elem.update_status();
-      elem.show();
+      elem.show(time_div/time_quota);
     }
   };
 

@@ -15,6 +15,7 @@ require 'lib/graph.rb'
 require 'lib/schemeparser.rb'
 require 'lib/rubyparser.rb'
 require 'lib/twitterseeker.rb'
+require 'lib/railway.rb'
 
 Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://batch/lines.db')
 require 'model/station.rb'
@@ -126,16 +127,16 @@ get '/field/:kind' do |kind|
 end
 
 get '/multi_layers' do
-  @kinds = %w(multi_layers_base hexagons cubes)
+  @kinds = %w(multi_layers_base hexagons cubes life)
   @navi = breadcrumb_list(:multi_layers)
   haml :multi_layers
 end
 
 get '/multi_layers/:kind' do |kind|
-  @kinds = %w(multi_layers_base hexagons cubes)
+  @kinds = %w(multi_layers_base hexagons cubes life)
   if @kinds.include?(kind) then
     @kind = kind
-    @navi = breadcrumb_list(:multi_layers)
+    @navi = breadcrumb_list([:multi_layers, @kind])
     haml :multi_layers
   else
     redirect '/multi_layers'
@@ -174,7 +175,31 @@ get '/api/tree.json' do
   graph = nil
   graph = Graph.new(node_length, node_length)
   graph.create_nodes
-  graph.hash_edges.to_json
+  graph.hash_tree_edges.to_json
+end
+
+get '/api/dag.json' do
+  content_type :json, :charset => 'utf-8'
+  node_length = rand(90)+10
+  graph = nil
+  graph = Graph.new(node_length, node_length)
+  graph.create_nodes
+  graph.hash_dag_edges.to_json
+end
+
+get '/api/railway/tokyo.lines.json' do
+  content_type :json, :charset => 'utf-8'
+  Railway::Lines.tokyo.to_hash.to_json
+end
+
+get '/api/railway/tokyo.stations.json' do
+  content_type :json, :charset => 'utf-8'
+  Railway::Station.tokyo.map(&:to_hash).to_json
+end
+
+get '/railway' do
+  @navi = breadcrumb_list(:railway)
+  haml :railway
 end
 
 get '/autonomous' do
