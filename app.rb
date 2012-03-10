@@ -41,6 +41,7 @@ get '/' do
     [:station, 'station'],
     [:lattice, 'lattice'],
     [:rails, 'rails'],
+    [:railway, 'railway'],
     [:twitter, 'twitter'],
   ]
   @navi = breadcrumb_list
@@ -203,8 +204,20 @@ get '/railway' do
 end
 
 get '/autonomous' do
+  @kinds = %w(base boids)
   @navi = breadcrumb_list(:autonomous)
   haml :autonomous
+end
+
+get '/autonomous/:kind' do |kind|
+  @kinds = %w(base boids)
+  if @kinds.include?(kind) then
+    @kind = kind
+    @navi = breadcrumb_list([:autonomous, @kind])
+    haml :autonomous
+  else
+    redirect '/autonomous'
+  end
 end
 
 get '/sicp' do

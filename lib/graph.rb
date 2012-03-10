@@ -17,7 +17,7 @@ class Graph
   end
 
   def create_tree_edges
-    adj_hash = hash_edges
+    adj_hash = hash_tree_edges
     @brothers = []
     adj_hash.values.find_all{|e| e.length > 1}.each do |ary|
       ary.each_with_index do |elem,idx|

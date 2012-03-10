@@ -9,7 +9,7 @@
     = javascript_include_tag 'jquery.ui.mouse.min'
     = javascript_include_tag 'jquery.ui.draggable.min'
     = javascript_include_tag 'excanvas'
-    = javascript_include_tag @kind
+    = javascript_include_tag "field/#{@kind}"
 
 - content_for :leftbar do
   %p please push to start
