@@ -34,6 +34,7 @@ get '/' do
     [:ruby, 'ruby'],
     [:visualized_list, 'list'],
     [:circuit, 'circuit'],
+    [:maze, 'maze'],
     [:life, 'life'],
     [:graphics, 'graphics'],
     [:music, 'sound'],
@@ -201,6 +202,11 @@ end
 get '/railway' do
   @navi = breadcrumb_list(:railway)
   haml :railway
+end
+
+get '/maze' do
+  @navi = breadcrumb_list(:maze)
+  haml :maze
 end
 
 get '/autonomous' do
