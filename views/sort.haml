@@ -1,12 +1,8 @@
 - content_for :header do
   = stylesheet_link_tag 'sort'
 - content_for :scripts do
-  = javascript_include_tag 'sort'
+  = javascript_include_tag 'sort/compare'
 - content_for :title do
   %title= title_with_name('visualized sorting algorithm')
 - content_for :leftbar do
-  %p please select sorting algorithm
-  %ul
-    - @kinds.each do |pair|
-      %li
-        %a{:href => "#", :class => "sort", :id => pair.first}= pair.last
+  %p please compare sorting algorithm
