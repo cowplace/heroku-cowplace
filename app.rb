@@ -35,6 +35,7 @@ get '/' do
     [:visualized_list, 'list'],
     [:circuit, 'circuit'],
     [:maze, 'maze'],
+    [:puyodot, 'puyodot'],
     [:life, 'life'],
     [:graphics, 'graphics'],
     [:music, 'sound'],
@@ -207,6 +208,12 @@ end
 get '/maze' do
   @navi = breadcrumb_list(:maze)
   haml :maze
+end
+
+
+get '/puyodot' do
+  @navi = breadcrumb_list(:puyodot)
+  haml :puyodot
 end
 
 get '/autonomous' do
