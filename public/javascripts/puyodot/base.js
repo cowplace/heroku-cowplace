@@ -293,7 +293,6 @@
       for(var i=0;i<this.w*this.h;i++){
         this.map.push(this.str_pallet.indexOf(this.str_map.substring(i,i+1)));
       }
-      console.log(this.map);
     };
     this.is_dot = function(x,y){
       if ((x < 0 || y < 0 || this.w <= x || this.h <= y)
