@@ -35,6 +35,12 @@
     this._w;
     this._h;
 
+    this._mouse_on = false;
+    this._mousepoint_x = -1;
+    this._mousepoint_y = -1;
+    this._drag_id_x = -1;
+    this._drag_id_y = -1;
+
     this.init = function(){
       this._dot_map = new Dot_map();
       this._dot_map.init();
@@ -123,7 +129,11 @@
             this.calc_connect_rforce(particle, sub_particle, this._RADIAN90);
             this.calc_connect_rforce(sub_particle, particle, this._RADIAN270);
           }
-          particle.vr *= this._ROTATE_FRICTION;
+          if (x == this._drag_id_x && y == this._drag_id_y){
+            particle.vr *= this._MOUSE_ROTATE_FRICTION;
+          } else {
+            particle.vr *= this._ROTATE_FRICTION;
+          }
           particle.radian += particle.vr;
         }
       }
@@ -161,6 +171,13 @@
               this.calc_connect_force(sub_particle, particle, this._RADIAN270, this._particle_distance * 2);
             }
             particle.ay += this._GRAVITY;
+            if (x == this._drag_id_x && y == this._drag_id_y){
+              var point = this.pullForce(particle.x, particle.y, this._mousepoint_x, this._mousepoint_y, this._MOUSE_PULL_RATE);
+              particle.ax += point.x;
+              particle.ay += point.y;
+              particle.vx *= this._MOUSE_MOVE_FRICTION;
+              particle.vy *= this._MOUSE_MOVE_FRICTION;
+            }
           }
         }
       }
@@ -176,6 +193,19 @@
       particle.ay += ay;
       target_particle.ax -= ax;
       target_particle.ay -= ay;
+    };
+
+    this.pullForce = function(x1, y1, x2, y2, rate){
+      var point = new Particle();
+      var distance = this.calcDistance(x1, y1, x2, y2);
+      var angle = Math.atan2(y2 - y1, x2 - x1);
+      point.x = Math.cos(angle) * distance * rate;
+      point.y = Math.sin(angle) * distance * rate;
+      return point;
+    };
+
+    this.calcDistance = function(x1, y1, x2, y2){
+      return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
     };
 
     this.ajust_radian = function(radian){
@@ -241,6 +271,37 @@
           }
         }
       }
+    };
+
+    this.mousedown = function(px,py){
+      var max_x, min_x, max_y, min_y;
+      for(var y = 0; y<this._h-1;y++){
+        for(var x = 0; x<this._w-1;x++){
+          if(this._dot_map.is_dot(x,y)){
+            max_x = Math.max(this._particle_list[x][y].x, this._particle_list[x+1][y].x, this._particle_list[x+1][y+1].x, this._particle_list[x][y+1].x);
+            min_x = Math.min(this._particle_list[x][y].x, this._particle_list[x+1][y].x, this._particle_list[x+1][y+1].x, this._particle_list[x][y+1].x);
+            max_y = Math.max(this._particle_list[x][y].y, this._particle_list[x+1][y].y, this._particle_list[x+1][y+1].y, this._particle_list[x][y+1].y);
+            min_y = Math.min(this._particle_list[x][y].y, this._particle_list[x+1][y].y, this._particle_list[x+1][y+1].y, this._particle_list[x][y+1].y);
+            particle2 = this._particle_list[x+1][y+1];
+            if (min_x <= px && px <= max_x && min_y <= py && py <= max_y){
+              this._drag_id_x = x;
+              this._drag_id_y = y;
+              this.mousemove(px,py);
+              break;
+            }
+          }
+        }
+      }
+    };
+    this.mousemove = function(px,py){
+      if (this._drag_id_x != -1 && this._drag_id_y != -1){
+        this._mousepoint_x = px;
+        this._mousepoint_y = py;
+      }
+    };
+    this.mouseup = function(){
+      this._drag_id_x = -1;
+      this._drag_id_y = -1;
     };
   };
 
@@ -320,6 +381,20 @@
   var update = function(){
     pic.update();
   };
+
+  $('#canvas').mousedown(function(e){
+    var x = e.pageX - $('#canvas').offset().left;
+    var y = e.pageY - $('#canvas').offset().top;
+    pic.mousedown(x, y);
+  });
+  $('#canvas').mousemove(function(e){
+    var x = e.pageX - $('#canvas').offset().left;
+    var y = e.pageY - $('#canvas').offset().top;
+    pic.mousemove(x, y);
+  });
+  $('#canvas').mouseup(function(e){
+    pic.mouseup();
+  });
 
   var timer_id;
   $(document).ready(function(){

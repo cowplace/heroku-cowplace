@@ -4,3 +4,9 @@ batch
 batch/*
 .sass-cache
 .sass-cache/*
+.bundle
+.bundle/*
+vender
+vender/*
+Gemfile.local
+Gemfile.lock

@@ -1,3 +1,4 @@
+# -*- coding : UTF-8 -*-
 require 'ruby_parser'
 
 class RubyTree

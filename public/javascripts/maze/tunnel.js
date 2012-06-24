@@ -1,8 +1,14 @@
 (function($){
-  var global_width = $('#main').width();
-  var global_height = $('#main').height();
-  $('#content').append('<canvas id="canvas" width="'+global_width+'" height="'+global_height+'" />');
-  var canvas = $('#canvas')[0].getContext('2d');
+  var field_width = $('#main').width() / 3;
+  var field_height = $('#main').height();
+  var canvas1_str = '<td width="'+field_width+'"><canvas id="canvas1" width="'+field_width+'" height="'+field_height+'" /></td>';
+  var canvas2_str = '<td width="'+field_width+'"><canvas id="canvas2" width="'+field_width+'" height="'+field_height+'" /></td>';
+  var canvas3_str = '<td width="'+field_width+'"><canvas id="canvas3" width="'+field_width+'" height="'+field_height+'" /></td>';
+  $('#content').append('<table><tr>'+canvas1_str+canvas2_str+canvas3_str+'</tr></table>');
+
+  var canvas1 = $('#canvas1')[0].getContext('2d');
+  var canvas2 = $('#canvas2')[0].getContext('2d');
+  var canvas3 = $('#canvas3')[0].getContext('2d');
 
   var PATH = 0;
   var WALL = 1;
@@ -10,7 +16,8 @@
   var GOAL = 3;
   var VISITED = 4;
   var ROUTE = 5;
-  var maze = function(h,w){
+  var maze = function(h,w,canvas){
+    this.canvas = canvas;
     this.height = h;
     this.width = w;
     this.grid = new Array();
@@ -86,8 +93,8 @@
     this.block[GOAL] = '#66dd66';
     this.block[VISITED] = '#99cc99';
     this.block[ROUTE] = '#66ff66';
-    var w_unit = global_width / (this.width+1);
-    var h_unit = global_height / (this.height+1);
+    var w_unit = field_width / (this.width+1);
+    var h_unit = field_height / (this.height+1);
     this.draw = function(){
       for(var i=0;i<this.grid.length;i++){
         for(var j=0;j<this.grid[i].length;j++){
@@ -96,11 +103,11 @@
       }
     };
     this.draw_cell = function(i,j){
-      canvas.beginPath();
-      canvas.fillStyle = this.block[this.grid[i][j]];
-      canvas.rect(j*w_unit,i*h_unit,w_unit,h_unit);
-      canvas.fill();
-      canvas.closePath();
+      this.canvas.beginPath();
+      this.canvas.fillStyle = this.block[this.grid[i][j]];
+      this.canvas.rect(j*w_unit,i*h_unit,w_unit,h_unit);
+      this.canvas.fill();
+      this.canvas.closePath();
     };
   };
 
@@ -177,9 +184,11 @@
       if(this.open.length == 0){
         return false;
       }
+      this.get_next_node();
+    };
+    this.get_next_node = function(){
       this.open.sort(function(a,b){return a.h-b.h;});
       this.node = this.open.shift();
-      //this.node = this.open.pop();
     };
     this.is_open = function(node){
       for(var i=0;i<this.open.length;i++){
@@ -214,24 +223,58 @@
     };
   };
 
-  var s;
+  var s1,s2,s3;
   var initialize = function(){
-    m = new maze(63,127);
-    m.make();
-    m.draw();
-    s = new seeker();
-    s.init(m);
+    var w = 47;
+    var h = 63;
+    m1 = new maze(h,w, canvas1);
+    m1.make();
+    m1.draw();
+    s1 = new seeker();
+    s1.init(m1);
+    m2 = new maze(h,w, canvas2);
+    m2.grid = m1.grid;
+    m2.draw();
+    s2 = new seeker();
+    s2.get_next_node = function(){
+      this.node = this.open.pop();
+    };
+    s2.init(m2);
+    m3 = new maze(h,w, canvas3);
+    m3.grid = m1.grid;
+    m3.draw();
+    s3 = new seeker();
+    s3.get_next_node = function(){
+      this.node = this.open.shift();
+    };
+    s3.init(m3);
   };
 
   var timer_id;
   var update = function(){
-    if(s.node.equal(s.end_node)){
-      s.route();
+    if(s1.node.equal(s1.end_node) && s2.node.equal(s2.end_node) && s3.node.equal(s3.end_node)){
+      s1.route();
+      s2.route();
+      s3.route();
       clearInterval(timer_id);
       timer_id = undefined;
       setTimeout(function(){location.reload(false);}, 3000);
     } else {
-      s.find_path();
+      if (s1.node.equal(s1.end_node)){
+        s1.route();
+      } else {
+        s1.find_path();
+      }
+      if (s2.node.equal(s2.end_node)){
+        s2.route();
+      } else {
+        s2.find_path();
+      }
+      if (s3.node.equal(s3.end_node)){
+        s3.route();
+      } else {
+        s3.find_path();
+      }
     } 
   };
 

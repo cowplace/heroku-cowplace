@@ -1,26 +1,10 @@
-require 'rubygems'
-require 'haml'
-require 'sass'
-require 'json'
-require 'sinatra'
-require 'sinatra_more/markup_plugin'
-require 'sinatra_more/render_plugin'
 Sinatra::Base.register SinatraMore::MarkupPlugin
 Sinatra::Base.register SinatraMore::RenderPlugin
 
-require 'fastercsv'
-require 'sequel'
-require 'lib/item.rb'
-require 'lib/graph.rb'
-require 'lib/schemeparser.rb'
-require 'lib/rubyparser.rb'
-require 'lib/twitterseeker.rb'
-require 'lib/railway.rb'
-
 Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://batch/lines.db')
-require 'model/station.rb'
-require 'model/prefecture.rb'
-require 'model/connection.rb'
+require './model/station.rb'
+require './model/prefecture.rb'
+require './model/connection.rb'
 
 get '/' do
   @kinds = [
