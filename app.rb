@@ -1,10 +1,10 @@
 Sinatra::Base.register SinatraMore::MarkupPlugin
 Sinatra::Base.register SinatraMore::RenderPlugin
 
-Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://batch/lines.db')
-require './model/station.rb'
-require './model/prefecture.rb'
-require './model/connection.rb'
+#Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://batch/lines.db')
+#require './model/station.rb'
+#require './model/prefecture.rb'
+#require './model/connection.rb'
 
 get '/' do
   @kinds = [
@@ -24,7 +24,7 @@ get '/' do
     [:graphics, 'graphics'],
     [:music, 'sound'],
     [:miniature, 'miniature'],
-    [:station, 'station'],
+#    [:station, 'station'],
     [:lattice, 'lattice'],
     [:rails, 'rails'],
     [:railway, 'railway'],
