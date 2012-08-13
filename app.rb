@@ -29,6 +29,7 @@ get '/' do
     [:rails, 'rails'],
     [:railway, 'railway'],
     [:twitter, 'twitter'],
+    [:lab, 'lab']
   ]
   @navi = breadcrumb_list
   haml :index
@@ -315,6 +316,12 @@ get '/twitter' do
   @navi = breadcrumb_list(:twitter)
   @tweets = TwitterSeeker.execute
   haml :twitter
+end
+
+get '/lab' do
+  @navi = breadcrumb_list(:lab)
+  @nodes = (1..1000).to_a
+  haml :lab
 end
 
 get '/top' do
