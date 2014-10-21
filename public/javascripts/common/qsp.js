@@ -110,8 +110,8 @@
     var base = 10;
     this.vx = Math.random()*base-base/2;
     this.vy = Math.random()*base-base/2;
-    //this.radius = Math.random()*10 + 5;
-    this.radius = 5;
+    this.radius = Math.random()*10 + 5;
+    //this.radius = 5;
     this.range = this.radius;
     this.mass = Math.pow(this.radius, 2);
     this.obj = obj;
@@ -173,7 +173,7 @@
         context.lineTo(other.x,other.y);
         context.closePath();
         context.stroke();
-        var string_arg = (min_dist - dist)/min_dist;
+        var string_arg = 1;//(min_dist - dist)/min_dist;
         var ax = string_arg * dx / dist;
         var ay = string_arg * dy / dist;
         this.vx += ax / this.mass;
@@ -259,6 +259,6 @@
   };
   $(document).ready(function(){
     initialize();
-    timer_id = setInterval(update, 1000/30);
+    timer_id = setInterval(update, 1000/60);
   });
 })(jQuery);

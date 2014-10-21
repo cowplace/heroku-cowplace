@@ -1,0 +1,17 @@
+- content_for :title do
+  %title= title_with_name('puyodot')
+- content_for :header do
+  = stylesheet_link_tag 'puyodot'
+- unless @kind.nil? then
+  - content_for :scripts do
+    = javascript_include_tag "punipuni/#{@kind}"
+
+- content_for :leftbar do
+  %p please select activity
+  %div
+    %ul
+      - @kinds.each do |kind|
+        %li
+          %a{:href => "/punipuni/#{kind}"}= kind
+
+#content

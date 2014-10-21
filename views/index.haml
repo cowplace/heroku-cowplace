@@ -1,8 +1,7 @@
 - content_for :title do
   %title= title_with_name
 - content_for :leftbar do
-  %p please select topics
-  %ul
+  %ul.nav.nav-list
     - @kinds.each do |pair|
       %li
         %a{:href => pair.first}= pair.last

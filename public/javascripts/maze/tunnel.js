@@ -224,6 +224,8 @@
   };
 
   var s1,s2,s3;
+  var seekers = [];
+  var mazes = [];
   var initialize = function(){
     var w = 47;
     var h = 63;

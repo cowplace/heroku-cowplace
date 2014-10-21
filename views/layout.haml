@@ -3,24 +3,27 @@
   %head
     %meta{'http-equiv' => 'content',:content => 'text/html; charset=utf-8'}
     %link{:rel => 'shortcut icon', :href => "favicon.ico", :type => "image/x-icon"}
+    %link{:rel => 'stylesheet', :href => "/css/bootstrap.min.css"}
     = stylesheet_link_tag 'common'
     != yield_content :header
     != yield_content :title
   %body
-    #header.navi
+    .page-header
       %h1 something fun @cowplace
-    #navigation.navi
+    #navigation
       != @navi
-    #leftbar.navi
-      != yield_content :leftbar
-    #wrapper
-      #status
-        != yield_content :status
-      #main
-        != yield
-    #footer.navi
-      %p copyleft (c) 2012 cowplace all rights reversed.
+    .container-fluid
+      .row
+        .span2
+          != yield_content :leftbar
+        .span10
+          #status
+            != yield_content :status
+          #main
+            != yield
+    #footer
+      %p copyleft (c) 2013 cowplace all rights reversed.
     #scripts
-      //= javascript_include_tag 'prototype'
       = javascript_include_tag 'jquery-1.5.1.min'
+      = javascript_include_tag 'bootstrap.min'
       != yield_content :scripts
